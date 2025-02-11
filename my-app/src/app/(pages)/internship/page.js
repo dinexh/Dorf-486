@@ -4,18 +4,22 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import './page.css';
 
-import { DOMAINS } from '../../data/domains';
-import { RULES, UNDERTAKING_POINTS } from '../../data/rules';
-import { BUS_ROUTES, BOYS_HOSTELS, GIRLS_HOSTELS, COUNTRIES, INDIAN_STATES } from '../../data/locations';
+import { DOMAINS } from '../../Data/domains';
+import { RULES, UNDERTAKING_POINTS } from '../../Data/rules';
+import { BUS_ROUTES, BOYS_HOSTELS, GIRLS_HOSTELS, COUNTRIES, INDIAN_STATES } from '../../Data/locations';
 
-type PhoneInputProps = {
-  value: string;
-  onChange: (value: string) => void;
-  countryCode: string;
-};
+/**
+ * @typedef {Object} PhoneInputProps
+ * @property {string} value
+ * @property {(value: string) => void} onChange
+ * @property {string} countryCode
+ */
 
-const PhoneInput = ({ value, onChange, countryCode }: PhoneInputProps) => {
-  const getCountryCode = (code: string) => {
+const PhoneInput = ({ value, onChange, countryCode }) => {
+  /**
+   * @param {string} code
+   */
+  const getCountryCode = (code) => {
     switch (code) {
       case 'IN': return '+91';
       case 'US': return '+1';
@@ -41,37 +45,40 @@ const PhoneInput = ({ value, onChange, countryCode }: PhoneInputProps) => {
   );
 };
 
-type StudentInfo = {
-  name: string;
-  idNumber: string;
-  email: string;
-  branch: string;
-  gender: string;
-  year: string;
-  phoneNumber: string;
-};
+/**
+ * @typedef {Object} StudentInfo
+ * @property {string} name
+ * @property {string} idNumber
+ * @property {string} email
+ * @property {string} branch
+ * @property {string} gender
+ * @property {string} year
+ * @property {string} phoneNumber
+ */
 
-type Residence = {
-  type: string;
-  hostelType: string;
-  busRoute: string;
-  country: string;
-  state: string;
-  district: string;
-  pincode: string;
-};
+/**
+ * @typedef {Object} Residence
+ * @property {string} type
+ * @property {string} hostelType
+ * @property {string} busRoute
+ * @property {string} country
+ * @property {string} state
+ * @property {string} district
+ * @property {string} pincode
+ */
 
-type FormData = {
-  selectedDomain: string;
-  agreedToRules: boolean;
-  studentInfo: StudentInfo;
-  residence: Residence;
-  idProof: null;
-};
+/**
+ * @typedef {Object} FormData
+ * @property {string} selectedDomain
+ * @property {boolean} agreedToRules
+ * @property {StudentInfo} studentInfo
+ * @property {Residence} residence
+ * @property {null} idProof
+ */
 
 export default function Register() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     selectedDomain: '',
     agreedToRules: false,
     studentInfo: {
@@ -97,7 +104,10 @@ export default function Register() {
 
   const [selectedDomainInfo, setSelectedDomainInfo] = useState('');
 
-  const handleDomainClick = (domain: typeof DOMAINS[0]) => {
+  /**
+   * @param {typeof DOMAINS[0]} domain
+   */
+  const handleDomainClick = (domain) => {
     setSelectedDomainInfo(domain.description);
     setFormData(prev => ({
       ...prev,
@@ -111,11 +121,12 @@ export default function Register() {
     router.push('/'); // Navigate to the home page
   };
 
-  const handleInputChange = (
-    section: 'studentInfo' | 'residence',
-    field: string,
-    value: string
-  ) => {
+  /**
+   * @param {'studentInfo' | 'residence'} section
+   * @param {string} field
+   * @param {string} value
+   */
+  const handleInputChange = (section, field, value) => {
     if (section === 'studentInfo') {
       if (field === 'idNumber') {
         // When ID changes, update email with default format
@@ -208,7 +219,7 @@ export default function Register() {
         ];
 
         for (const validation of studentValidation) {
-          if (!formData.studentInfo[validation.field as keyof StudentInfo]) {
+          if (!formData.studentInfo[validation.field]) {
             toast.error(validation.message);
             return;
           }
@@ -261,7 +272,7 @@ export default function Register() {
           ];
 
           for (const validation of indiaValidation) {
-            if (!formData.residence[validation.field as keyof Residence]) {
+            if (!formData.residence[validation.field]) {
               toast.error(validation.message);
               return;
             }
@@ -273,8 +284,6 @@ export default function Register() {
             return;
           }
         }
-
-
 
         toast.success('Residence information saved successfully!');
         setCurrentStep(prev => prev + 1);
