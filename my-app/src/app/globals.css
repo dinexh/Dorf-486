@@ -2,5 +2,13 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "popins", sans-serif;
+  font-family: 'popins', sans-serif;
+}
+.home-component{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color:green;
+  color: white;
 }
