@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import './sidebar.css';
 import { 
     FaHome, FaGlobe, FaBriefcase, FaTasks, FaImages, 
@@ -26,31 +27,31 @@ export default function Sidebar({ userRole }) {
             <div className="sidebar-menu">
                 <ul className="menu-list">
                     <li className="menu-item">
-                        <a href="/dashboard" className="menu-link">
+                        <Link href="/dashboard" className="menu-link">
                             <FaHome className="menu-icon" />
                             <span>Home</span>
-                        </a>
+                        </Link>
                     </li>
                     {userRole === 'superadmin' && (
                         <li className="menu-item">
-                            <a href="/dashboard/manage-admins" className="menu-link">
+                            <Link href="/dashboard/manage-admins" className="menu-link">
                                 <FaUsersCog className="menu-icon" />
                                 <span>Manage Admins</span>
-                            </a>
+                            </Link>
                         </li>
                     )}
                     <li className="menu-item">
-                        <a href="/dashboard/domains" className="menu-link">
+                        <Link href="/dashboard/domains" className="menu-link">
                             <FaGlobe className="menu-icon" />
                             <span>Domains</span>
-                        </a>
+                        </Link>
                     </li>
 
                     <li className="menu-item">
-                        <a href="/dashboard/areas" className="menu-link">
+                        <Link href="/dashboard/areas" className="menu-link">
                             <FaBriefcase className="menu-icon" />
                             <span>Areas of Work</span>
-                        </a>
+                        </Link>
                     </li>
 
                     {/* Activities Dropdown */}
@@ -74,16 +75,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.activities && (
                                 <ul className="submenu">
                                     <li>
-                                        <a href="/dashboard/activities/view" className="submenu-link">
+                                        <Link href="/dashboard/activities/view" className="submenu-link">
                                             <FaTable className="menu-icon" />
                                             <span>View Activities</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="/dashboard/activities/upload" className="submenu-link">
+                                        <Link href="/dashboard/activities/upload" className="submenu-link">
                                             <FaUpload className="menu-icon" />
                                             <span>Upload Activities</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             )}
@@ -111,16 +112,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.gallery && (
                                 <ul className="submenu">
                                     <li>
-                                        <a href="/dashboard/gallery/view" className="submenu-link">
+                                        <Link href="/dashboard/gallery/view" className="submenu-link">
                                             <FaImages className="menu-icon" />
                                             <span>View Gallery</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="/dashboard/gallery/upload" className="submenu-link">
+                                        <Link href="/dashboard/gallery/upload" className="submenu-link">
                                             <FaUpload className="menu-icon" />
                                             <span>Upload to Gallery</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             )}
@@ -148,16 +149,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.news && (
                                 <ul className="submenu">
                                     <li>
-                                        <a href="/dashboard/news/view" className="submenu-link">
+                                        <Link href="/dashboard/news/view" className="submenu-link">
                                             <FaTable className="menu-icon" />
                                             <span>View News</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a href="/dashboard/news/upload" className="submenu-link">
+                                        <Link href="/dashboard/news/upload" className="submenu-link">
                                             <FaUpload className="menu-icon" />
                                             <span>Upload News</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             )}
@@ -165,10 +166,10 @@ export default function Sidebar({ userRole }) {
                     </li>
 
                     <li className="menu-item">
-                        <a href="/dashboard/profile" className="menu-link">
+                        <Link href="/dashboard/sidebar_components/profile" className="menu-link">
                             <FaUser className="menu-icon" />
                             <span>Profile</span>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

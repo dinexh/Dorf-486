@@ -1,6 +1,7 @@
 "use client";
 import './nav.css';
-import { useAuth } from '@/app/contexts/AuthContext';
+import {  FaSignOutAlt } from 'react-icons/fa';
+import { useAuth } from '@/contexts/AuthContext';
 
 const DashboardNav = () => {
     const { user, logout } = useAuth();
@@ -11,9 +12,10 @@ const DashboardNav = () => {
                 <h2>Smart Village Revolution Admin Portal | KLEF </h2>
             </div>
             <div className="dashboard-nav-two">
-                <h2>{user?.name }</h2>
+                <h2>{user?.name}</h2>
                 <button onClick={logout}>
-                    Logout
+                    logout
+                    <FaSignOutAlt />
                 </button>
             </div>
         </div>
