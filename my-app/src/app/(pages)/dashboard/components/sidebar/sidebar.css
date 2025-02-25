@@ -1,0 +1,66 @@
+.sidebar {
+    width: 250px;
+    background: lightgreen;
+    padding: 20px;
+}
+
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item {
+    margin-bottom: 10px;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.menu-link:hover {
+    background: green;
+    border-radius: 5px;
+}
+
+.menu-icon {
+    margin-right: 10px;
+}
+
+.dropdown-trigger {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.dropdown-icon {
+    margin-left: auto;
+}
+
+.menu-group {
+    position: relative;
+}
+
+.submenu {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 20px;
+    display: block; /* Always block since we control visibility with React */
+}
+
+.submenu-link {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    text-decoration: none;
+    color: #666;
+}
+
+.submenu-link:hover {
+    background: #e0e0e0;
+    border-radius: 5px;
+}

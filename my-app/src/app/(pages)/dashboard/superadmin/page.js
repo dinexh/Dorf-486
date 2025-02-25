@@ -10,7 +10,7 @@ export default function SuperAdminDashboard() {
                 <DashboardNav />
             </div>
             <div className="dashboard-component-main">
-                <Sidebar />
+                <Sidebar userRole="superadmin" />
                 <div className="main-content">
                     <h1>Super Admin Dashboard</h1>
                 </div>

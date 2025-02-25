@@ -11,7 +11,7 @@ const DashboardNav = () => {
                 <h2>Smart Village Revolution Admin Portal | KLEF </h2>
             </div>
             <div className="dashboard-nav-two">
-                <h2>{user?.name || 'Loading...'}</h2>
+                <h2>{user?.name }</h2>
                 <button onClick={logout}>
                     Logout
                 </button>
