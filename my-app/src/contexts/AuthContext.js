@@ -17,6 +17,33 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
+    const refreshToken = async () => {
+        try {
+            const response = await fetch('/api/auth/refresh', {
+                method: 'POST',
+                credentials: 'include',
+                cache: 'no-store'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.user);
+                return true;
+            } else {
+                if (response.status === 401) {
+                    setUser(null);
+                    if (window.location.pathname.startsWith('/dashboard')) {
+                        router.push('/auth/login');
+                    }
+                }
+                return false;
+            }
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            return false;
+        }
+    };
+
     const checkAuth = async (retryCount = 0) => {
         try {
             console.log('Checking auth, attempt:', retryCount + 1);
@@ -33,16 +60,13 @@ export function AuthProvider({ children }) {
                 setLoading(false);
             } else {
                 console.log('Auth check failed:', response.status);
-                // If unauthorized, clear user
                 if (response.status === 401) {
                     setUser(null);
                     setLoading(false);
-                    // Redirect to login if on a protected route
                     if (window.location.pathname.startsWith('/dashboard')) {
                         router.push('/auth/login');
                     }
                 } else if (retryCount < 3) {
-                    // Retry up to 3 times with exponential backoff
                     const delay = Math.pow(2, retryCount) * 1000;
                     console.log(`Retrying in ${delay}ms...`);
                     setTimeout(() => {
@@ -70,9 +94,17 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         checkAuth();
+        
         // Set up periodic auth check every 5 minutes
-        const interval = setInterval(checkAuth, 5 * 60 * 1000);
-        return () => clearInterval(interval);
+        const authCheckInterval = setInterval(checkAuth, 5 * 60 * 1000);
+        
+        // Set up token refresh every 30 minutes
+        const tokenRefreshInterval = setInterval(refreshToken, 30 * 60 * 1000);
+        
+        return () => {
+            clearInterval(authCheckInterval);
+            clearInterval(tokenRefreshInterval);
+        };
     }, []);
 
     const logout = async () => {
@@ -97,7 +129,8 @@ export function AuthProvider({ children }) {
         user,
         loading,
         logout,
-        checkAuth
+        checkAuth,
+        refreshToken
     };
 
     return (

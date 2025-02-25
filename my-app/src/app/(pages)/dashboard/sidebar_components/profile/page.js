@@ -10,7 +10,7 @@ export default function ProfilePage() {
                     <h1>Profile Page</h1>
                 </div>
                 <div className="profile-component-main">
-                    {/* Profile content will go here */}
+                    
                 </div>
             </div>
         </div>

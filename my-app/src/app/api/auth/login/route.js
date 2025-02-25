@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import mysql from "@/lib/db";
 import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
     try {
@@ -30,6 +31,16 @@ export async function POST(req) {
         // Successfully authenticated
         const user = rows[0];
         
+        // Generate JWT token
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
         // Create response
         const response = NextResponse.json({
             message: "Login successful",
@@ -41,8 +52,8 @@ export async function POST(req) {
             }
         });
         
-        // Set cookies in the response
-        response.cookies.set('token', user.id.toString(), {
+        // Set cookies with JWT token
+        response.cookies.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
