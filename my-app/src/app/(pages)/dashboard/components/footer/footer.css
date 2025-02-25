@@ -1,0 +1,14 @@
+.dashboard-footer {
+    background-color:green;
+    padding: 0.8rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-footer p {
+    color: white;
+    font-size: 1rem;
+    font-weight: 200;
+}

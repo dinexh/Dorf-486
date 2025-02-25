@@ -66,8 +66,14 @@ export default function Login() {
 
             const data = await response.json();
             toast.success('Login successful!');
-            // Add your redirect logic here
-            router.push('/dashboard'); // Adjust the route as needed
+            // Redirect based on user role
+            if (data.user.role === 'superadmin') {
+                router.push('/dashboard/superadmin');
+            } else if (data.user.role === 'admin') {
+                router.push('/dashboard/admin');
+            } else {
+                router.push('/dashboard/admin'); // Default to admin dashboard
+            }
 
         } catch (error) {
             if (!navigator.onLine) {

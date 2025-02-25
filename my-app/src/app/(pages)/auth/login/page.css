@@ -96,7 +96,7 @@
 .form-group-button button {
     width: 100%;
     padding: 0.875rem;
-    background: #2c5530;
+    background: green;
     color: white;
     border: none;
     border-radius: 4px;
@@ -118,6 +118,7 @@
 
 .form-group-button p:hover {
     color: #3a703f;
+    text-decoration: underline;
 }
 
 .login-component-in-copyright {
