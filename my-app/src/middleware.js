@@ -3,6 +3,7 @@ import { jwtVerify } from 'jose';
 
 // Function to verify JWT token
 async function verifyToken(token) {
+    if (!token) return null;
     try {
         const encoder = new TextEncoder();
         const { payload } = await jwtVerify(
@@ -24,21 +25,35 @@ export async function middleware(request) {
                         path === '/auth/forgot-password' ||
                         path === '/api/auth/refresh';
 
-    // Get the token from the cookies
-    const token = request.cookies.get('token')?.value || '';
+    // Get both tokens from cookies
+    const accessToken = request.cookies.get('accessToken')?.value;
+    const refreshToken = request.cookies.get('refreshToken')?.value;
 
-    // For protected routes, verify the JWT token
+    // For protected routes
     if (!isPublicPath) {
-        const payload = await verifyToken(token);
-        if (!payload) {
-            return NextResponse.redirect(new URL('/auth/login', request.url));
+        // First try the access token
+        const accessPayload = await verifyToken(accessToken);
+        
+        if (!accessPayload) {
+            // If access token is invalid, try refresh token
+            const refreshPayload = await verifyToken(refreshToken);
+            
+            if (!refreshPayload) {
+                // If both tokens are invalid, redirect to login
+                return NextResponse.redirect(new URL('/auth/login', request.url));
+            }
+            
+            // If refresh token is valid but access token isn't, redirect to refresh endpoint
+            if (path !== '/api/auth/refresh') {
+                return NextResponse.redirect(new URL('/api/auth/refresh', request.url));
+            }
         }
     }
 
     // If the path is public and user is logged in, redirect to dashboard
-    if (isPublicPath && token && path !== '/api/auth/refresh') {
+    if (isPublicPath && accessToken && path !== '/api/auth/refresh') {
         try {
-            const payload = await verifyToken(token);
+            const payload = await verifyToken(accessToken);
             if (payload) {
                 if (payload.role === 'superadmin') {
                     return NextResponse.redirect(new URL('/dashboard/superadmin', request.url));
@@ -55,9 +70,15 @@ export async function middleware(request) {
     // Role-based access control for dashboard routes
     if (path.startsWith('/dashboard/')) {
         try {
-            const payload = await verifyToken(token);
+            const payload = await verifyToken(accessToken);
             if (!payload) {
-                return NextResponse.redirect(new URL('/auth/login', request.url));
+                // Try refresh token if access token is invalid
+                const refreshPayload = await verifyToken(refreshToken);
+                if (!refreshPayload) {
+                    return NextResponse.redirect(new URL('/auth/login', request.url));
+                }
+                // Redirect to refresh endpoint to get new access token
+                return NextResponse.redirect(new URL('/api/auth/refresh', request.url));
             }
 
             // Protect superadmin routes

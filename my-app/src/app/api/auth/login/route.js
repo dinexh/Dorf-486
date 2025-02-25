@@ -31,14 +31,26 @@ export async function POST(req) {
         // Successfully authenticated
         const user = rows[0];
         
-        // Generate JWT token
-        const token = jwt.sign(
+        // Generate access token (short-lived)
+        const accessToken = jwt.sign(
             {
                 userId: user.id,
-                role: user.role
+                role: user.role,
+                type: 'access'
             },
             process.env.JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '30m' } // 30 minutes
+        );
+
+        // Generate refresh token (long-lived)
+        const refreshToken = jwt.sign(
+            {
+                userId: user.id,
+                role: user.role,
+                type: 'refresh'
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' } // 7 days
         );
 
         // Create response
@@ -52,19 +64,19 @@ export async function POST(req) {
             }
         });
         
-        // Set cookies with JWT token
-        response.cookies.set('token', token, {
+        // Set cookies
+        response.cookies.set('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 // 24 hours
+            maxAge: 30 * 60 // 30 minutes
         });
         
-        response.cookies.set('userRole', user.role, {
+        response.cookies.set('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 // 24 hours
+            maxAge: 7 * 24 * 60 * 60 // 7 days
         });
 
         return response;

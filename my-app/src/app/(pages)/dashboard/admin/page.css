@@ -36,7 +36,10 @@
     padding: 2rem;
     overflow-y: auto;
 }
-
+.main-content {
+    width: 100%;
+    background-color: red;
+}
 .dashboard-component-footer {
     position: fixed;
     bottom: 0;

@@ -6,18 +6,23 @@ import jwt from 'jsonwebtoken';
 export async function POST() {
     try {
         const cookieStore = cookies();
-        const token = cookieStore.get('token')?.value;
+        const refreshToken = cookieStore.get('refreshToken')?.value;
 
-        if (!token) {
+        if (!refreshToken) {
             return NextResponse.json(
-                { error: "No token found" },
+                { error: "No refresh token found" },
                 { status: 401 }
             );
         }
 
         try {
-            // Verify the current token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            // Verify the refresh token
+            const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+            // Check if it's actually a refresh token
+            if (decoded.type !== 'refresh') {
+                throw new Error('Invalid token type');
+            }
 
             // Verify the user in the database
             const [rows] = await mysql.execute(
@@ -34,17 +39,29 @@ export async function POST() {
 
             const user = rows[0];
 
-            // Generate new JWT token
-            const newToken = jwt.sign(
+            // Generate new access token
+            const newAccessToken = jwt.sign(
                 {
                     userId: user.id,
-                    role: user.role
+                    role: user.role,
+                    type: 'access'
                 },
                 process.env.JWT_SECRET,
-                { expiresIn: '24h' }
+                { expiresIn: '30m' }
             );
 
-            // Create response with new token
+            // Generate new refresh token
+            const newRefreshToken = jwt.sign(
+                {
+                    userId: user.id,
+                    role: user.role,
+                    type: 'refresh'
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '7d' }
+            );
+
+            // Create response
             const response = NextResponse.json({
                 message: "Token refreshed successfully",
                 user: {
@@ -55,29 +72,33 @@ export async function POST() {
                 }
             });
 
-            // Set new cookies with updated JWT
-            response.cookies.set('token', newToken, {
+            // Set new cookies
+            response.cookies.set('accessToken', newAccessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 24 hours
+                maxAge: 30 * 60 // 30 minutes
             });
 
-            response.cookies.set('userRole', user.role, {
+            response.cookies.set('refreshToken', newRefreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 24 hours
+                maxAge: 7 * 24 * 60 * 60 // 7 days
             });
 
             return response;
 
         } catch (jwtError) {
-            // If token verification fails
-            return NextResponse.json(
+            console.error('JWT verification failed:', jwtError);
+            // If token verification fails, clear both tokens
+            const response = NextResponse.json(
                 { error: "Invalid token" },
                 { status: 401 }
             );
+            response.cookies.delete('accessToken');
+            response.cookies.delete('refreshToken');
+            return response;
         }
 
     } catch (error) {
