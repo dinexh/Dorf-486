@@ -38,7 +38,7 @@
 }
 .main-content {
     width: 100%;
-    background-color: red;
+    /* background-color: red; */
 }
 .dashboard-component-footer {
     position: fixed;

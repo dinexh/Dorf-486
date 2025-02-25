@@ -1,15 +1,29 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
 import './sidebar.css';
 import { 
     FaHome, FaGlobe, FaBriefcase, FaTasks, FaImages, 
     FaNewspaper, FaUser, FaUsersCog, FaChevronDown, 
-    FaChevronUp, FaUpload, FaTable 
+    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers
 } from 'react-icons/fa';
 
-export default function Sidebar({ userRole }) {
+export default function Sidebar({ 
+    userRole, 
+    onProfileClick,
+    onHomeClick,
+    onManageAdminsViewClick,
+    onManageAdminsAddClick,
+    onDomainsClick,
+    onAreasClick,
+    onActivitiesViewClick,
+    onActivitiesUploadClick,
+    onGalleryViewClick,
+    onGalleryUploadClick,
+    onNewsViewClick,
+    onNewsUploadClick
+}) {
     const [openMenus, setOpenMenus] = useState({
+        admins: false,
         activities: false,
         gallery: false,
         news: false
@@ -27,31 +41,60 @@ export default function Sidebar({ userRole }) {
             <div className="sidebar-menu">
                 <ul className="menu-list">
                     <li className="menu-item">
-                        <Link href="/dashboard" className="menu-link">
+                        <a onClick={onHomeClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaHome className="menu-icon" />
                             <span>Home</span>
-                        </Link>
+                        </a>
                     </li>
                     {userRole === 'superadmin' && (
                         <li className="menu-item">
-                            <Link href="/dashboard/manage-admins" className="menu-link">
-                                <FaUsersCog className="menu-icon" />
-                                <span>Manage Admins</span>
-                            </Link>
+                            <div className="menu-group">
+                                <a 
+                                    href="#"
+                                    className="menu-link dropdown-trigger"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        toggleMenu('admins');
+                                    }}
+                                >
+                                    <FaUsersCog className="menu-icon" />
+                                    <span>Manage Admins</span>
+                                    {openMenus.admins ? 
+                                        <FaChevronUp className="dropdown-icon" /> : 
+                                        <FaChevronDown className="dropdown-icon" />
+                                    }
+                                </a>
+                                {openMenus.admins && (
+                                    <ul className="submenu">
+                                        <li>
+                                            <a onClick={onManageAdminsViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
+                                                <FaUsers className="menu-icon" />
+                                                <span>View Admins</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a onClick={onManageAdminsAddClick} className="submenu-link" style={{ cursor: 'pointer' }}>
+                                                <FaUserPlus className="menu-icon" />
+                                                <span>Add Admin</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
                         </li>
                     )}
                     <li className="menu-item">
-                        <Link href="/dashboard/domains" className="menu-link">
+                        <a onClick={onDomainsClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaGlobe className="menu-icon" />
                             <span>Domains</span>
-                        </Link>
+                        </a>
                     </li>
 
                     <li className="menu-item">
-                        <Link href="/dashboard/areas" className="menu-link">
+                        <a onClick={onAreasClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaBriefcase className="menu-icon" />
                             <span>Areas of Work</span>
-                        </Link>
+                        </a>
                     </li>
 
                     {/* Activities Dropdown */}
@@ -75,16 +118,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.activities && (
                                 <ul className="submenu">
                                     <li>
-                                        <Link href="/dashboard/activities/view" className="submenu-link">
+                                        <a onClick={onActivitiesViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaTable className="menu-icon" />
                                             <span>View Activities</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                     <li>
-                                        <Link href="/dashboard/activities/upload" className="submenu-link">
+                                        <a onClick={onActivitiesUploadClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaUpload className="menu-icon" />
                                             <span>Upload Activities</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                 </ul>
                             )}
@@ -112,16 +155,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.gallery && (
                                 <ul className="submenu">
                                     <li>
-                                        <Link href="/dashboard/gallery/view" className="submenu-link">
+                                        <a onClick={onGalleryViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaImages className="menu-icon" />
                                             <span>View Gallery</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                     <li>
-                                        <Link href="/dashboard/gallery/upload" className="submenu-link">
+                                        <a onClick={onGalleryUploadClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaUpload className="menu-icon" />
                                             <span>Upload to Gallery</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                 </ul>
                             )}
@@ -149,16 +192,16 @@ export default function Sidebar({ userRole }) {
                             {openMenus.news && (
                                 <ul className="submenu">
                                     <li>
-                                        <Link href="/dashboard/news/view" className="submenu-link">
+                                        <a onClick={onNewsViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaTable className="menu-icon" />
                                             <span>View News</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                     <li>
-                                        <Link href="/dashboard/news/upload" className="submenu-link">
+                                        <a onClick={onNewsUploadClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaUpload className="menu-icon" />
                                             <span>Upload News</span>
-                                        </Link>
+                                        </a>
                                     </li>
                                 </ul>
                             )}
@@ -166,10 +209,10 @@ export default function Sidebar({ userRole }) {
                     </li>
 
                     <li className="menu-item">
-                        <Link href="/dashboard/sidebar_components/profile" className="menu-link">
+                        <a onClick={onProfileClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaUser className="menu-icon" />
                             <span>Profile</span>
-                        </Link>
+                        </a>
                     </li>
                 </ul>
             </div>
