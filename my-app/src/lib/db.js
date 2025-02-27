@@ -1,21 +1,25 @@
-import mysql from "mysql2/promise";
+import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: 3306,
+    host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
-try {
-    await pool.query("SELECT 1");
-    console.log("Connected to MySQL");
-} catch (error) {
-    console.error("Error connecting to MySQL:", error);
-}
+// Test the connection
+pool.getConnection()
+    .then(connection => {
+        console.log('Database connected successfully');
+        connection.release();
+    })
+    .catch(err => {
+        console.error('Error connecting to the database:', err);
+    });
 
 export default pool;

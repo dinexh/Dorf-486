@@ -54,7 +54,6 @@ CREATE TABLE HeroSection (
 CREATE TABLE Domain (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    imageLink TEXT NOT NULL
 );
 
 -- Areas Of Work Table
