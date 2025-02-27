@@ -37,9 +37,9 @@ CREATE TABLE Gallery (
 -- News Table
 CREATE TABLE News (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATETIME NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    articleImage TEXT NOT NULL,
     articleLink TEXT NOT NULL
 );
 

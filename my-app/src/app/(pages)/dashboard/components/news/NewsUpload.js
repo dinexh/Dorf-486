@@ -1,96 +1,100 @@
-'use client';
-
 import { useState } from 'react';
 import './News.css';
 
-export default function NewsUpload() {
+const NewsUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        articleImage: null,
-        articleLink: ''
+        date: '',
+        imageUrl: ''
     });
+    const [message, setMessage] = useState('');
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setFormData(prev => ({
-            ...prev,
-            articleImage: file
-        }));
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Format date to ISO string
+            const formattedData = {
+                ...formData,
+                date: new Date(formData.date).toISOString()
+            };
+            
+            const res = await fetch('/api/dashboard/news', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formattedData)
+            });
+            if (res.ok) {
+                setMessage('News article uploaded successfully!');
+                setFormData({ title: '', description: '', date: '', imageUrl: '' });
+            } else {
+                setMessage('Failed to upload news article');
+            }
+        } catch (error) {
+            setMessage('Error uploading news article');
+        }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     return (
-        <div className="news-component">
-            <div className="news-header">
-                <h1>Upload News</h1>
-            </div>
-            <div className="upload-form-container">
-                <form onSubmit={handleSubmit} className="upload-form">
-                    <div className="form-group">
-                        <label htmlFor="title">News Title</label>
-                        <input
-                            type="text"
-                            id="title"
+        <div className="newsupload-component">
+            <div className="newsupload-component-heading">
+                <h2>Instructions to update club details</h2>
+                <p>Resize Image: Use the provided Canva link to resize the image to the optimal dimensions for website display.
+                <a href="https://www.canva.com/design/DAGVOb7x6hg/H4_YD4-t9s5ZT-iXhWKKjg/view?utm_content=DAGVOb7x6hg&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&mode=preview"> Canva Link</a></p>
+                <p>After resizing the image, download it and upload it to a storage service like <a href="https://www.imghippo.com">ImgHippo</a> Please refer to the <a href="https://firebasestorage.googleapis.com/v0/b/sacwebsite-8d0b5.appspot.com/o/Video_Tutorial.mp4?alt=media&token=a9487ecb-40aa-423a-bf20-26150128b7f5">Video Tutorial</a></p>
+            </div> 
+            <div className="newsupload-component-main">
+                <form onSubmit={handleSubmit}>
+                    <div className="newsform-group">
+                        <label htmlFor="title">Title</label>
+                        <input 
+                            type="text" 
+                            name="title"
                             value={formData.title}
-                            onChange={(e) => setFormData({...formData, title: e.target.value})}
+                            onChange={handleChange}
                             required
                         />
                     </div>
-
-                    <div className="form-group">
+                    <div className="newsform-group">
                         <label htmlFor="description">Description</label>
-                        <textarea
-                            id="description"
+                        <input 
+                            type="text"
+                            name="description"
                             value={formData.description}
-                            onChange={(e) => setFormData({...formData, description: e.target.value})}
-                            required
-                            rows={4}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="articleImage">News Image</label>
-                        <input
-                            type="file"
-                            id="articleImage"
-                            accept="image/*"
-                            onChange={handleImageChange}
+                            onChange={handleChange}
                             required
                         />
                     </div>
-
-                    {formData.articleImage && (
-                        <div className="image-preview">
-                            <img 
-                                src={URL.createObjectURL(formData.articleImage)} 
-                                alt="News preview" 
-                            />
-                        </div>
-                    )}
-
-                    <div className="form-group">
-                        <label htmlFor="articleLink">Article Link</label>
-                        <input
-                            type="url"
-                            id="articleLink"
-                            value={formData.articleLink}
-                            onChange={(e) => setFormData({...formData, articleLink: e.target.value})}
-                            placeholder="https://example.com/article"
+                    <div className="newsform-group">
+                        <label htmlFor="date">Date</label>
+                        <input 
+                            type="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
                             required
                         />
                     </div>
-
-                    <div className="form-actions">
-                        <button type="submit" className="submit-btn">Upload News</button>
-                        <button type="button" className="cancel-btn">Cancel</button>
+                    <div className="newsform-group">
+                        <label htmlFor="imageUrl">Image URL</label>
+                        <input 
+                            type="text"
+                            name="imageUrl"
+                            value={formData.imageUrl}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
+                    <button type="submit">Upload News</button>
                 </form>
+                {message && <p className="message">{message}</p>}
             </div>
         </div>
     );
-} 
+}
+
+export default NewsUpload;
