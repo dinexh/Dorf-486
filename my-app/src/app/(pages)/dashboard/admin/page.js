@@ -13,6 +13,7 @@ import GalleryView from "../components/gallery/GalleryView";
 import GalleryUpload from "../components/gallery/GalleryUpload";
 import NewsView from "../components/news/NewsView";
 import NewsUpload from "../components/news/NewsUpload";
+import Home from "../components/home/home";
 import './page.css';
 
 export default function AdminDashboard() {
@@ -39,7 +40,7 @@ export default function AdminDashboard() {
             case 'news-upload':
                 return <NewsUpload />;
             default:
-                return <h1>Admin Dashboard</h1>;
+                return <Home />;
         }
     };
 
