@@ -15,6 +15,7 @@ import NewsView from "../components/news/NewsView";
 import NewsUpload from "../components/news/NewsUpload";
 import ViewAdmins from "../components/manage-admins/ViewAdmins";
 import AddAdmin from "../components/manage-admins/AddAdmin";
+import Home from "../components/home/home";
 import './page.css';
 
 export default function SuperAdminDashboard() {
@@ -45,7 +46,7 @@ export default function SuperAdminDashboard() {
             case 'news-upload':
                 return <NewsUpload />;
             default:
-                return <h1>Super Admin Dashboard</h1>;
+                return <Home />;
         }
     };
 
