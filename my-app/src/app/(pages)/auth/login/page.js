@@ -5,9 +5,11 @@ import { useState, useEffect } from "react";
 import Auth from "@/app/assets/auth.jpg";
 import "./page.css";
 import { Toaster, toast } from 'react-hot-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Login() {
     const router = useRouter();
+    const { checkAuth } = useAuth();
     const [captchaValue, setCaptchaValue] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -65,6 +67,10 @@ export default function Login() {
             }
 
             const data = await response.json();
+            
+            // Update auth context immediately after successful login
+            await checkAuth();
+            
             toast.success('Login successful!');
             // Redirect based on user role
             if (data.user.role === 'superadmin') {
