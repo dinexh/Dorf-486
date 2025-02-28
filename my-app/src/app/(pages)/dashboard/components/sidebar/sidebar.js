@@ -4,7 +4,7 @@ import './sidebar.css';
 import { 
     FaHome, FaGlobe, FaBriefcase, FaTasks, FaImages, 
     FaNewspaper, FaUser, FaUsersCog, FaChevronDown, 
-    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers
+    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers , FaAward
 } from 'react-icons/fa';
 
 export default function Sidebar({ 
@@ -20,6 +20,7 @@ export default function Sidebar({
     onGalleryViewClick,
     onGalleryUploadClick,
     onNewsViewClick,
+    onUpdateawardClick,
     onNewsUploadClick
 }) {
     const [openMenus, setOpenMenus] = useState({
@@ -132,6 +133,12 @@ export default function Sidebar({
                                 </ul>
                             )}
                         </div>
+                    </li>
+                    <li className='menu-item'>
+                        <a onClick={onUpdateawardClick} className="menu-link" style={{ cursor: 'pointer' }}>
+                            <FaAward className="menu-icon" />x
+                            <span>Awards</span>
+                        </a>
                     </li>
 
                     {/* Gallery Dropdown */}
