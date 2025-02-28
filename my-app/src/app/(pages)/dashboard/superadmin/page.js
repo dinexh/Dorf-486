@@ -15,6 +15,7 @@ import NewsUpload from "../components/news/NewsUpload";
 import ViewAdmins from "../components/manage-admins/ViewAdmins";
 import AddAdmin from "../components/manage-admins/AddAdmin";
 import Home from "../components/home/home";
+import Updateaward from "../components/awards/Upateawards"; 
 import './page.css';
 
 export default function SuperAdminDashboard() {
@@ -42,6 +43,8 @@ export default function SuperAdminDashboard() {
                 return <GalleryUpload />;
             case 'news-upload':
                 return <NewsUpload />;
+            case 'awards':
+                return <Updateaward />;
             default:
                 return <Home />;
         }
@@ -67,6 +70,7 @@ export default function SuperAdminDashboard() {
                     onGalleryUploadClick={() => setActiveComponent('gallery-upload')}
                     onNewsViewClick={() => setActiveComponent('news-view')}
                     onNewsUploadClick={() => setActiveComponent('news-upload')}
+                    onUpdateawardClick={() => setActiveComponent('awards')}  // Add this line
                 />
                 <div className="main-content">
                     {renderComponent()}

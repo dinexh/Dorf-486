@@ -43,6 +43,15 @@ CREATE TABLE News (
     articleLink TEXT NOT NULL
 );
 
+CREATE TABLE awards (
+    id SERIAL PRIMARY KEY,
+    image_link TEXT NOT NULL,
+    description TEXT NOT NULL,
+    award_date DATE NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+---------------------------------------- 
 -- Hero Section Table
 CREATE TABLE HeroSection (
     id INT AUTO_INCREMENT PRIMARY KEY,
