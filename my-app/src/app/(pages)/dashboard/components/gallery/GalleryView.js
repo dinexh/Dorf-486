@@ -1,4 +1,4 @@
-const Gallery = () => {
+const GalleryView = () => {
     return (    
         <div className="Gallery-admin">
             <div className="gallery-admin-header">
@@ -10,3 +10,4 @@ const Gallery = () => {
         </div>
     );   
 }
+export default GalleryView;
