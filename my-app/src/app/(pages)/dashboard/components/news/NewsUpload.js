@@ -129,7 +129,34 @@ const NewsUpload = () => {
                         <button type="submit">Upload News</button>
                     </div>
                 </form>
+
                 {message && <p className="message">{message}</p>}
+            </div>
+            <div className="news-upload-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Image URL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredNews.map(article => (
+                            <tr key={article.id}>
+                                <td>{article.title}</td>
+                                <td>{article.description}</td>
+                                <td>{article.date}</td>
+                                <td>{article.imageUrl}</td>
+                                <td>
+                                    <button onClick={() => handleDelete(article.id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

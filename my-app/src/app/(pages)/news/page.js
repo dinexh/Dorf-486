@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FaArrowUp, FaSearch } from 'react-icons/fa';
 import './page.css';
 import DashboardFooter from '../dashboard/components/footer/footer';
 
@@ -8,6 +9,8 @@ const NewsPage = () => {
     const [news, setNews] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const router = useRouter();
+    const [showScrollToTop, setShowScrollToTop] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchNews();
@@ -31,34 +34,64 @@ const NewsPage = () => {
     );
 
     return (
-        <div className="news-component">
-            <div className="news-component-in">
-                <div className="news-component-in-heading">
-                    <input 
-                        type="text" 
-                        placeholder="Search" 
-                        className="Searchinput"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+        <>
+        <div className="back-to-home">
+        {showScrollToTop && (
+          <button onClick={scrollToTop} className="back-to-top-button">
+            <FaArrowUp />
+          </button>
+        )}
+      </div>
+      <div className='newsContainer'>
+        <div className="newsContainer-in">
+          <div className="newsContainer-in-header">
+            <div className="newsContainer-in-header-in">
+              <header className="header">
+                <div className="header-in-one">
+                  <div className="search-wrapper">
+                    <FaSearch className="search-icon" />
+                    <input
+                      type="text"
+                      placeholder="Search articles..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
                     />
-                    <h1>Our Achievements in News Articles</h1>
-                    <button onClick={() => router.push('/')}>
-                        Back To home
-                    </button>
+                  </div>
                 </div>
-                <div className="news-component-in-main">
-                    {filteredNews.map((article) => (
-                        <div key={article.id} className="news-article">
-                            <img src={article.articleLink} alt={article.title} />
-                            <h3>{article.title}</h3>
-                            <p>{article.description}</p>
-                            <span>{new Date(article.date).toLocaleDateString()}</span>
-                        </div>
-                    ))}
+                <div className="header-in-two">
+                  <h1>Our Achievements in News Articles</h1>
                 </div>
+                <div className="header-in-three">
+                  <a href="/">Back to Home</a>
+                </div>
+              </header>
             </div>
-            <DashboardFooter />
+          </div>
+
+          <div className="articles-container">
+            <div className="articles-grid">
+            {filteredNews.map((article) => (
+                <div key={article.id} className="news-article">
+                    <img src={article.articleLink} alt={article.title} />
+                    <div className="news-article-content">
+                        <h3>{article.title}</h3>
+                        <p>{article.description}</p>
+                        <span>{new Date(article.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}</span>
+                    </div>
+                </div>
+            ))}
+            </div>
+          </div>
         </div>
+        <div className='footer-news'>
+            <DashboardFooter />
+          </div>
+      </div>
+    </>
     );
 }
 
