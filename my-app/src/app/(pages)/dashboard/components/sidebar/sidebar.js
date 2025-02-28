@@ -192,12 +192,6 @@ export default function Sidebar({
                             {openMenus.news && (
                                 <ul className="submenu">
                                     <li>
-                                        <a onClick={onNewsViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
-                                            <FaTable className="menu-icon" />
-                                            <span>View News</span>
-                                        </a>
-                                    </li>
-                                    <li>
                                         <a onClick={onNewsUploadClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaUpload className="menu-icon" />
                                             <span>Upload News</span>
