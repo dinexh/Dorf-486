@@ -1,0 +1,114 @@
+.news-component {
+    width: 100%;
+    background: #f5f5f5;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+.news-component-in-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem;
+}
+
+.news-component-in-heading h1 {
+    color: green;
+    font-size: 32px;
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+.Searchinput {
+    width: 300px;
+    padding: 10px 15px;
+    border: 2px solid green;
+    border-radius: 25px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+.Searchinput:focus {
+    border-color: green;
+}
+
+.news-component-in-heading button {
+    background-color: green;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.news-component-in-heading button:hover {
+    background-color: #004d99;
+}
+
+.news-component-in-main {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.news-article {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.news-article:hover {
+    transform: translateY(-5px);
+}
+
+.news-article img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.news-article h3 {
+    color: #003366;
+    padding: 15px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.news-article p {
+    color: #666;
+    padding: 0 15px 15px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.news-article span {
+    display: block;
+    padding: 10px 15px;
+    color: #888;
+    font-size: 12px;
+    border-top: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+    .news-component-in-heading h1 {
+        font-size: 24px;
+    }
+
+    .Searchinput {
+        width: 250px;
+    }
+
+    .news-component-in-main {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}

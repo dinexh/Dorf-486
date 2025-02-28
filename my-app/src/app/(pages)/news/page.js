@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import './page.css';
+import DashboardFooter from '../dashboard/components/footer/footer';
 
 const NewsPage = () => {
     const [news, setNews] = useState([]);
@@ -55,6 +57,7 @@ const NewsPage = () => {
                     ))}
                 </div>
             </div>
+            <DashboardFooter />
         </div>
     );
 }

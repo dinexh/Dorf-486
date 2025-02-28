@@ -11,7 +11,6 @@ import ViewActivities from "../components/activities/ViewActivities";
 import UploadActivities from "../components/activities/UploadActivities";
 import GalleryView from "../components/gallery/GalleryView";
 import GalleryUpload from "../components/gallery/GalleryUpload";
-import NewsView from "../components/news/NewsView";
 import NewsUpload from "../components/news/NewsUpload";
 import Home from "../components/home/home";
 import './page.css';
@@ -35,8 +34,6 @@ export default function AdminDashboard() {
                 return <GalleryView />;
             case 'gallery-upload':
                 return <GalleryUpload />;
-            case 'news-view':
-                return <NewsView />;
             case 'news-upload':
                 return <NewsUpload />;
             default:
@@ -59,7 +56,6 @@ export default function AdminDashboard() {
                     onActivitiesUploadClick={() => setActiveComponent('activities-upload')}
                     onGalleryViewClick={() => setActiveComponent('gallery-view')}
                     onGalleryUploadClick={() => setActiveComponent('gallery-upload')}
-                    onNewsViewClick={() => setActiveComponent('news-view')}
                     onNewsUploadClick={() => setActiveComponent('news-upload')}
                 />
                 <div className="main-content">

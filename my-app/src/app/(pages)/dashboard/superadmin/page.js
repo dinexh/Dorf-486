@@ -11,7 +11,6 @@ import ViewActivities from "../components/activities/ViewActivities";
 import UploadActivities from "../components/activities/UploadActivities";
 import GalleryView from "../components/gallery/GalleryView";
 import GalleryUpload from "../components/gallery/GalleryUpload";
-import NewsView from "../components/news/NewsView";
 import NewsUpload from "../components/news/NewsUpload";
 import ViewAdmins from "../components/manage-admins/ViewAdmins";
 import AddAdmin from "../components/manage-admins/AddAdmin";
@@ -41,8 +40,6 @@ export default function SuperAdminDashboard() {
                 return <GalleryView />;
             case 'gallery-upload':
                 return <GalleryUpload />;
-            case 'news-view':
-                return <NewsView />;
             case 'news-upload':
                 return <NewsUpload />;
             default:
