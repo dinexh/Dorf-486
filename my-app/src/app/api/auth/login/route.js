@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import mysql from "@/lib/db";
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import pool from '@/lib/db';
 
 export async function POST(req) {
+    let connection;
     try {
         const { idNumber, password } = await req.json();
 
@@ -15,10 +18,12 @@ export async function POST(req) {
             );
         }
 
+        connection = await pool.getConnection();
+
         // Query the database
-        const [rows] = await mysql.execute(
-            'SELECT * FROM User WHERE idNumber = ? AND password = ?',
-            [idNumber, password]
+        const [rows] = await connection.execute(
+            'SELECT * FROM User WHERE idNumber = ?',
+            [idNumber]
         );
 
         if (rows.length === 0) {
@@ -28,8 +33,17 @@ export async function POST(req) {
             );
         }
 
-        // Successfully authenticated
         const user = rows[0];
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return NextResponse.json(
+                { error: "Invalid credentials" },
+                { status: 401 }
+            );
+        }
+
+        // Successfully authenticated
         
         // Generate access token (short-lived)
         const accessToken = jwt.sign(
@@ -87,5 +101,7 @@ export async function POST(req) {
             { error: "Internal server error" },
             { status: 500 }
         );
+    } finally {
+        if (connection) connection.release();
     }
 }
