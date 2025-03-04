@@ -4,31 +4,3 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-.home-component{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: green;
-  color: white;
-  height: 100vh;
-}
-.home-component h1{
-  font-size: 4rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-}
-.home-component p{
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-.home-component button{
-  background-color: white;
-  color: green;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
