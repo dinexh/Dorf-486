@@ -1,15 +1,14 @@
-import Image from "next/image";
-const Gallery = () =>{
+const Gallery = () => {
     return(
         <div className="gallery-component">
             <div className="gallery-component-in">
                 <div className="gallery-component-in-hero">
-                    <Image src="" alt="" />
+                    {/* <Image src="" alt="" /> */}
                     {/* images will be fetched from backend */}
                 </div>
                 <div className="gallery-component-in-main">
                     <div className="gallery-component-in-main-heading">
-                        <h1>Capturing the Spirit: Moments of SVR Through the Years<h1/>
+                        <h1>Capturing the Spirit: Moments of SVR Through the Years</h1>
                         <h4>Our gallery is a tribute to the countless memories we've created together.</h4>
                     </div>
                     <div className="gallery-component-in-main-domains">
@@ -26,4 +25,5 @@ const Gallery = () =>{
         </div>   
     )
 }
+
 export default Gallery;
