@@ -1,4 +1,5 @@
 import { useState , useEffect} from 'react';
+import Image from 'next/image';
 import './News.css';
 
 const NewsUpload = () => {
@@ -84,9 +85,10 @@ const NewsUpload = () => {
                 <p>After resizing the image, download it and upload it to a storage service like <a href="https://www.imghippo.com">ImgHippo</a> Please refer to the <a href="https://firebasestorage.googleapis.com/v0/b/sacwebsite-8d0b5.appspot.com/o/Video_Tutorial.mp4?alt=media&token=a9487ecb-40aa-423a-bf20-26150128b7f5">Video Tutorial</a></p>
             </div> 
             <div className="newsupload-component-main">
+                <div className="newsupload-component-main-form">
                 <form onSubmit={handleSubmit}>
                     <div className="newsform-group">
-                        <label htmlFor="title">Title</label>
+                        <label htmlFor="title">Title(15-20 words)</label>
                         <input 
                             type="text" 
                             name="title"
@@ -96,7 +98,7 @@ const NewsUpload = () => {
                         />
                     </div>
                     <div className="newsform-group">
-                        <label htmlFor="description">Description</label>
+                        <label htmlFor="description">Description(25-30 words)</label>
                         <input 
                             type="text"
                             name="description"
@@ -125,12 +127,33 @@ const NewsUpload = () => {
                             required
                         />
                     </div>
+                
+                    <div className="newsform-group">
+                        <label htmlFor="articleUrl">Article URL</label>
+                        <input 
+                            type="text"
+                            name="articleUrl"
+                            value={formData.articleUrl}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>  
                     <div className="newsform-group-button">
                         <button type="submit">Upload News</button>
                     </div>
                 </form>
 
                 {message && <p className="message">{message}</p>}
+                </div>
+                <div className="newsupload-component-main-demo">
+                    <h2>Demo of the Article</h2>
+                    <Image 
+                        src="https://iili.io/3q4H2pe.th.png" 
+                        alt="Demo Article"
+                        width={500}
+                        height={300}
+                    />
+                </div>
             </div>
             <div className="news-upload-table">
                 <table>
@@ -139,7 +162,8 @@ const NewsUpload = () => {
                             <th>Title</th>
                             <th>Description</th>
                             <th>Date</th>
-                            <th>Image URL</th>
+                            {/* <th>Image URL</th> */}
+                            {/* <th>Article URL</th> */}
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -149,7 +173,8 @@ const NewsUpload = () => {
                                 <td>{article.title}</td>
                                 <td>{article.description}</td>
                                 <td>{article.date}</td>
-                                <td>{article.imageUrl}</td>
+                                {/* <td>{article.imageUrl}</td> */}
+                                {/* <td>{article.ArticleUrl}</td> */}
                                 <td>
                                     <button onClick={() => handleDelete(article.id)}>Delete</button>
                                 </td>

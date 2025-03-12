@@ -70,21 +70,26 @@ const NewsPage = () => {
 
           <div className="articles-container">
             <div className="articles-grid">
-            {filteredNews.map((article) => (
-                <div key={article.id} className="news-article">
+              {filteredNews.map(article => (
+                <div key={article.id} className="article-card">
+                  <div className="article-image-wrapper">
                     <img src={article.articleLink} alt={article.title} />
-                    <div className="news-article-content">
-                        <h3>{article.title}</h3>
-                        <p>{article.description}</p>
-                        <span>{new Date(article.date).toLocaleDateString('en-US', {
+                  </div>
+                  <div className="article-content">
+                    <span className="article-date">{new Date(article.date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         })}</span>
-                    </div>
+                    <h2>{article.title}</h2>
+                    <p>{article.description}</p>
+                    <a href={article.ArticleUrl} target="_blank" rel="noopener noreferrer" 
+                      className="read-more-btn">Read Full Article</a>
+                  </div>
                 </div>
-            ))}
+              ))}
             </div>
+            
           </div>
         </div>
         <div className='footer-news'>

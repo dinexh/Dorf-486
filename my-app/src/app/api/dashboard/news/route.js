@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
     let connection;
     try {
-        const { title, description, date, imageUrl } = await request.json();
+        const { title, description, date, imageUrl, articleUrl } = await request.json();
         
         // Input validation
         if (!title || !description || !date || !imageUrl) {
@@ -17,10 +17,10 @@ export async function POST(request) {
         connection = await pool.getConnection();
         
         const query = `
-            INSERT INTO News (title, description, date, articleLink)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO News (title, description, date, articleLink, ArticleUrl)
+            VALUES (?, ?, ?, ?, ?)
         `;
-        const values = [title, description, new Date(date), imageUrl];
+        const values = [title, description, new Date(date), imageUrl, articleUrl];
 
         const [result] = await connection.execute(query, values);
 
