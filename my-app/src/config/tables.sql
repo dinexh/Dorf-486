@@ -1,3 +1,4 @@
+
 CREATE DATABASE IF NOT EXISTS svr_klef;
 USE svr_klef;
 -- Enum for Role
@@ -42,7 +43,8 @@ CREATE TABLE News (
     date DATETIME NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    articleLink TEXT NOT NULL
+    articleLink TEXT NOT NULL,
+    ArticleUrl LONGTEXT
 );
 
 CREATE TABLE awards (

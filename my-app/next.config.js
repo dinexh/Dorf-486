@@ -7,7 +7,8 @@ const nextConfig = {
             'i.imgur.com',
             'imgur.com',
             'drive.google.com',
-            'res.cloudinary.com'
+            'res.cloudinary.com',
+            'iili.io'
         ],
     },
 }
