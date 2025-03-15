@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import mysql from "@/lib/db";
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -43,28 +42,14 @@ export async function POST(req) {
             );
         }
 
-        // Successfully authenticated
-        
-        // Generate access token (short-lived)
-        const accessToken = jwt.sign(
+        // Single token with 1 hour expiry
+        const token = jwt.sign(
             {
                 userId: user.id,
-                role: user.role,
-                type: 'access'
+                role: user.role
             },
             process.env.JWT_SECRET,
-            { expiresIn: '30m' } // 30 minutes
-        );
-
-        // Generate refresh token (long-lived)
-        const refreshToken = jwt.sign(
-            {
-                userId: user.id,
-                role: user.role,
-                type: 'refresh'
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: '7d' } // 7 days
+            { expiresIn: '1h' }
         );
 
         // Create response
@@ -78,19 +63,12 @@ export async function POST(req) {
             }
         });
         
-        // Set cookies
-        response.cookies.set('accessToken', accessToken, {
+        // Set cookie
+        response.cookies.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 30 * 60 // 30 minutes
-        });
-        
-        response.cookies.set('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 7 * 24 * 60 * 60 // 7 days
+            maxAge: 60 * 60 // 1 hour in seconds
         });
 
         return response;

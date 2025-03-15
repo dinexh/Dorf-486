@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import mysql from "@/lib/db";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST(req) {
     let connection;
@@ -45,6 +47,14 @@ export async function POST(req) {
         // Create reset link
         const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${resetToken}`;
 
+        // Read the HTML template
+        const templatePath = path.join(process.cwd(), 'src', 'app', 'template', 'mail.html');
+        let emailTemplate = fs.readFileSync(templatePath, 'utf8');
+        
+        // Replace variables in the template
+        emailTemplate = emailTemplate.replace('${user.name}', user.name);
+        emailTemplate = emailTemplate.replace('${resetLink}', resetLink);
+
         // Configure email transporter
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -61,14 +71,7 @@ export async function POST(req) {
             from: process.env.SMTP_FROM,
             to: email,
             subject: 'Password Reset Request',
-            html: `
-                <h1>Password Reset Request</h1>
-                <p>Dear ${user.name},</p>
-                <p>We received a request to reset your password. Click the link below to reset it:</p>
-                <p><a href="${resetLink}">Reset Password</a></p>
-                <p>This link will expire in 1 hour.</p>
-                <p>If you didn't request this, please ignore this email.</p>
-            `
+            html: emailTemplate
         });
 
         return NextResponse.json({

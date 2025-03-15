@@ -22,10 +22,6 @@ export default function Login() {
         setCaptchaValue(generateCaptcha());
     }, []);
 
-    const GoToForgotPassword = () => {
-        router.push('/auth/forgot-password');
-    }
-
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -37,21 +33,18 @@ export default function Login() {
         const password = formData.get('password');
         const enteredCaptcha = formData.get('captive');
 
-        // Validate inputs
         if (!idNumber || !password) {
             toast.error('Please fill in all fields');
             return;
         }
 
-        // Validate captcha
         if (!enteredCaptcha || parseInt(enteredCaptcha) !== captchaValue) {
             toast.error('Invalid captcha code');
-            setCaptchaValue(Math.floor(1000 + Math.random() * 9000)); // Generate new captcha
+            setCaptchaValue(Math.floor(1000 + Math.random() * 9000));
             return;
         }
 
         setIsLoading(true);
-        const loadingToast = toast.loading('Logging in...');
 
         try {
             const response = await fetch('/api/auth/login', {
@@ -60,39 +53,32 @@ export default function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ idNumber, password }),
+                credentials: 'include' // Important: include credentials
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error(response.status === 401 ? 'Invalid credentials' : 'Server error');
+                throw new Error(data.error || 'Login failed');
             }
 
-            const data = await response.json();
-            
-            // Update auth context immediately after successful login
+            // Update auth context first
             await checkAuth();
+
+            // Use replace instead of push
+            const redirectPath = data.user.role === 'superadmin' 
+                ? '/dashboard/superadmin' 
+                : '/dashboard/admin';
+
+            router.replace(redirectPath);
             
-            toast.success('Login successful!');
-            // Redirect based on user role
-            if (data.user.role === 'superadmin') {
-                router.push('/dashboard/superadmin');
-            } else if (data.user.role === 'admin') {
-                router.push('/dashboard/admin');
-            } else {
-                router.push('/dashboard/admin'); // Default to admin dashboard
-            }
+            // Show success message after navigation is queued
+            toast.success('Login successful');
 
         } catch (error) {
-            if (!navigator.onLine) {
-                toast.error('No internet connection');
-            } else if (error.message === 'Failed to fetch') {
-                toast.error('Unable to connect to the server');
-            } else {
-                toast.error(error.message || 'Login failed. Please try again.');
-            }
-            console.error('Login failed:', error);
+            toast.error(error.message || 'Login failed. Please try again.');
         } finally {
             setIsLoading(false);
-            toast.dismiss(loadingToast);
         }
     };
 
@@ -116,7 +102,7 @@ export default function Login() {
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="email">EMP/ERP ID</label>
-                                <input type="text" id="id" name="id" />
+                                <input type="text" id="id" name="id" disabled={isLoading} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
@@ -125,6 +111,7 @@ export default function Login() {
                                         type={showPassword ? "text" : "password"} 
                                         id="password" 
                                         name="password" 
+                                        disabled={isLoading}
                                     />
                                     <span 
                                         className="password-toggle" 
@@ -135,17 +122,20 @@ export default function Login() {
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="">ReCaptive : {captchaValue || 'Loading...'}</label>
-                                <input type="text" id="captive" name="captive" placeholder="Enter the 4-digit code above" />
+                                <label htmlFor="captive">ReCaptive : {captchaValue || 'Loading...'}</label>
+                                <input 
+                                    type="text" 
+                                    id="captive" 
+                                    name="captive" 
+                                    placeholder="Enter the 4-digit code above"
+                                    disabled={isLoading}
+                                />
                             </div>
                             <div className="form-group-button">
-                                <button 
-                                    type="submit" 
-                                    disabled={isLoading}
-                                >
+                                <button type="submit" disabled={isLoading}>
                                     {isLoading ? 'Logging in...' : 'Login'}
                                 </button>
-                                <p onClick={GoToForgotPassword}>Forgot Password?</p>
+                                <p onClick={() => router.push('/auth/forgot-password')}>Forgot Password?</p>
                             </div>
                         </form>
                     </div>
