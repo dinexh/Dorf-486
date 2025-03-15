@@ -10,9 +10,9 @@ const ViewAdmins = () => {
         fetchAdmins();
     }, []);
 
-    const getDisplayStatus = (dbStatus) => {
-        // Convert database status to display status
-        return dbStatus === 'active' ? 'ACTIVE' : 'HOLD';
+    const getStatusString = (status) => {
+        // Convert numeric status to string
+        return status === 1 ? 'ACTIVE' : 'HOLD';
     };
 
     const fetchAdmins = async () => {
@@ -23,11 +23,10 @@ const ViewAdmins = () => {
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to fetch admins');
             }
-            // Convert database status to display status
+            // Convert numeric status to string format
             const formattedAdmins = data.map(admin => ({
                 ...admin,
-                displayStatus: getDisplayStatus(admin.status),
-                status: admin.status
+                status: getStatusString(admin.status)
             }));
             setAdmins(formattedAdmins);
         } catch (error) {
@@ -41,7 +40,7 @@ const ViewAdmins = () => {
     const handleHold = async (admin) => {
         try {
             setLoading(true);
-            const newStatus = admin.status === 'active' ? 'HOLD' : 'ACTIVE';
+            const newStatus = admin.status === 'ACTIVE' ? 'HOLD' : 'ACTIVE';
             const response = await fetch('/api/dashboard/admins', {
                 method: 'PUT',
                 headers: {
@@ -63,7 +62,7 @@ const ViewAdmins = () => {
                 throw new Error(data.error || 'Failed to update admin status');
             }
 
-            toast.success(`Admin ${newStatus === 'HOLD' ? 'deactivated' : 'activated'} successfully`);
+            toast.success(`Admin status ${newStatus === 'HOLD' ? 'held' : 'activated'} successfully`);
             await fetchAdmins();
         } catch (error) {
             console.error('Error updating admin status:', error);
@@ -121,23 +120,23 @@ const ViewAdmins = () => {
                     </thead>
                     <tbody>
                         {admins.map((admin) => (
-                            <tr key={admin.id} className={admin.status === 'inactive' ? 'admin-held' : ''}>
+                            <tr key={admin.id} className={admin.status === 'HOLD' ? 'admin-held' : ''}>
                                 <td>{admin.name}</td>
                                 <td>{admin.idNumber}</td>
                                 <td>{admin.email}</td>
                                 <td>{admin.role}</td>
                                 <td>
-                                    <span className={`status-badge ${admin.status}`}>
-                                        {admin.displayStatus.toLowerCase()}
+                                    <span className={`status-badge ${admin.status.toLowerCase()}`}>
+                                        {admin.status.toLowerCase()}
                                     </span>
                                 </td>
                                 <td>
                                     <button 
-                                        className={`hold-btn ${admin.status === 'inactive' ? 'active' : ''}`}
+                                        className={`hold-btn ${admin.status === 'HOLD' ? 'active' : ''}`}
                                         onClick={() => handleHold(admin)}
                                         disabled={loading}
                                     >
-                                        {admin.status === 'inactive' ? 'Activate' : 'Deactivate'}
+                                        {admin.status === 'HOLD' ? 'Unhold' : 'Hold'}
                                     </button>
                                     <button 
                                         className="delete-btn"

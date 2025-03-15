@@ -43,9 +43,6 @@ export async function PUT(request) {
             );
         }
 
-        // Convert HOLD/ACTIVE to inactive/active
-        const dbStatus = status === 'HOLD' ? 'inactive' : 'active';
-
         connection = await pool.getConnection();
 
         // First, let's check the table structure
@@ -75,7 +72,7 @@ export async function PUT(request) {
                 idNumber || existingAdmin[0].idNumber,
                 email || existingAdmin[0].email,
                 role || existingAdmin[0].role,
-                dbStatus,
+                status,  // Using the original status value for now
                 id
             ]
         );
@@ -86,7 +83,7 @@ export async function PUT(request) {
 
         return NextResponse.json({ 
             message: `Admin status updated successfully`,
-            status: dbStatus
+            status: status
         });
     } catch (error) {
         console.error('Error updating admin:', error);

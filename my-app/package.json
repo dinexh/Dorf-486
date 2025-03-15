@@ -11,6 +11,7 @@
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.12.0",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "chart.js": "^4.4.8",
     "jose": "^6.0.10",
     "jsonwebtoken": "^9.0.2",
