@@ -1,10 +1,5 @@
-
 CREATE DATABASE IF NOT EXISTS svr_klef;
 USE svr_klef;
--- Enum for Role
-CREATE TABLE Role (
-    value ENUM('superadmin', 'admin') NOT NULL
-);
 
 -- Users Table
 CREATE TABLE User (
@@ -17,7 +12,7 @@ CREATE TABLE User (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Activities Table (modified)
+-- Activities Table
 CREATE TABLE Activity (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -28,7 +23,7 @@ CREATE TABLE Activity (
     FOREIGN KEY (domain_id) REFERENCES Domain(id)
 );
 
--- Gallery Table (modified)
+-- Gallery Table
 CREATE TABLE Gallery (
     id INT AUTO_INCREMENT PRIMARY KEY,
     heroImageLink TEXT,
@@ -47,6 +42,7 @@ CREATE TABLE News (
     ArticleUrl LONGTEXT
 );
 
+-- Awards Table
 CREATE TABLE awards (
     id SERIAL PRIMARY KEY,
     image_link TEXT NOT NULL,
@@ -55,21 +51,21 @@ CREATE TABLE awards (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
----------------------------------------- 
--- Hero Section Table
-CREATE TABLE HeroSection (
+-- NEW: HeroImage Table
+CREATE TABLE HeroImage (
     id INT AUTO_INCREMENT PRIMARY KEY,
     imageLink TEXT NOT NULL,
-    title VARCHAR(255) NOT NULL
+    imageDescription TEXT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Domains Table (modified)
+-- Domains Table
 CREATE TABLE Domain (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
--- Areas Of Work Table (modified)
+-- Areas Of Work Table
 CREATE TABLE AreasOfWork (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -79,7 +75,7 @@ CREATE TABLE AreasOfWork (
     FOREIGN KEY (domain_id) REFERENCES Domain(id)
 );
 
--- New FocusAreas Table
+-- Focus Areas Table
 CREATE TABLE FocusAreas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     domain_id INT NOT NULL,
@@ -88,22 +84,23 @@ CREATE TABLE FocusAreas (
     FOREIGN KEY (domain_id) REFERENCES Domain(id)
 );
 
+-- Initial Users
 INSERT INTO User (name, email, password, idNumber, role) 
 VALUES (
     'Dinesh Korukonda',
     '2300030350@kluniversity.in',
-    '$2b$10$cZpu99ppHs/uCptP7PZUOe3BQsdtBprieZwOemayR6V82D68GIC5S',  -- Replace with actual bcrypt hash
+    '$2b$10$ywQ5ZvLCPhCr26QGTmjFV.tvX8RYKD3eV1lLH2P9e6PKqtcYkLI.q',
+    -- 'Dinesh@123',
     '2300030350',
     'superadmin'
 );
 
--- Create admin user
--- Password is 'admin123' (hashed)
 INSERT INTO User (name, email, password, idNumber, role) 
 VALUES (
     'Pavan Karthik',
     '2300032048@kluniversity.in',
-    '$$2b$10$bMD42XOo08Wt44oRp1l/Se6ruS.7wk4uksL15PmmFRuQBsi1RuHaS',  -- Replace with actual bcrypt hash
+    '$2b$10$NZKQC4UwfY/V..FclAewBOfqQUSHQ8tKvAXABTMarOt50YhCZ..vC',
+    -- 'Karthik@123',
     '2300032048',
     'admin'
 );
