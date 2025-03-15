@@ -241,3 +241,16 @@
 .password-toggle:hover {
     color: #3a703f;
 }
+.form-group-note {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+.form-group-note p {
+    font-size: 0.8rem;
+    color: #2c5530;
+}
