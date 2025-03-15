@@ -1,11 +1,11 @@
+/* Activities Component Container */
 .activities-component {
     padding: 2rem;
+    /* background-color: #f8f9fa; */
+    min-height: 100vh;
 }
 
 .activities-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 2rem;
 }
 
@@ -15,33 +15,19 @@
     margin: 0;
 }
 
-.activities-filters {
-    display: flex;
-    gap: 1rem;
-}
-
-.search-input, .filter-select {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.875rem;
-}
-
-.search-input {
-    width: 250px;
-}
-
 /* Table Styles */
-.activities-table-container {
-    background-color: white;
+.table-container {
+    background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    margin-top: 1rem;
 }
 
 .activities-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.95rem;
 }
 
 .activities-table th,
@@ -52,113 +38,29 @@
 }
 
 .activities-table th {
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
     font-weight: 600;
     color: #333;
 }
 
-.activities-table tbody tr:hover {
-    background-color: #f9f9f9;
+.activities-table tr:hover {
+    background-color: #f5f5f5;
 }
 
+/* Table Actions */
 .table-actions {
     display: flex;
     gap: 0.5rem;
 }
 
-.table-actions button {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-}
-
-.no-data {
-    text-align: center;
-    color: #666;
-    padding: 2rem !important;
-}
-
-/* Upload Form Styles */
-.upload-form-container {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.upload-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group label {
+.edit-btn,
+.delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input,
-.form-group select {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.form-group input[type="file"] {
-    padding: 0.5rem 0;
-    border: none;
-}
-
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.submit-btn, .cancel-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s;
-}
-
-.submit-btn {
-    background-color: #4CAF50;
-    color: white;
-    flex: 2;
-}
-
-.submit-btn:hover {
-    background-color: #45a049;
-}
-
-.cancel-btn {
-    background-color: #f5f5f5;
-    color: #333;
-    flex: 1;
-}
-
-.cancel-btn:hover {
-    background-color: #e0e0e0;
-}
-
-/* Common Button Styles */
-.edit-btn, .delete-btn {
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
 }
 
 .edit-btn {
@@ -177,4 +79,163 @@
 
 .delete-btn:hover {
     background-color: #d32f2f;
-} 
+}
+
+/* Report Link */
+.activities-table a {
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.activities-table a:hover {
+    text-decoration: underline;
+}
+
+/* No Data Message */
+.no-data {
+    text-align: center;
+    color: #666;
+    padding: 2rem !important;
+    font-style: italic;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .activities-component {
+        padding: 1rem;
+    }
+
+    .activities-table th,
+    .activities-table td {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .activities-table {
+        min-width: 800px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Optional: Animation for row deletion */
+.activities-table tr {
+    transition: all 0.3s ease;
+}
+
+.activities-table tr.deleting {
+    opacity: 0.5;
+    background-color: #ffebee;
+}
+
+/* Optional: Status indicators */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-inactive {
+    background-color: #ffebee;
+    color: #c62828;
+}
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.modal .form-group {
+    margin-bottom: 1rem;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.modal input,
+.modal select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modal-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.modal-actions button[type="button"] {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.modal-actions button[type="submit"] {
+    background-color: #2196F3;
+    color: white;
+}
+
+.modal-actions button:hover {
+    opacity: 0.9;
+}

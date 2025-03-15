@@ -1,20 +1,102 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import './Activities.css';
 
 export default function UploadActivities() {
+    const [domains, setDomains] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         date: '',
         domain: '',
         studentsParticipated: '',
-        reportFile: null
+        reportLink: ''
     });
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        fetchDomains();
+    }, []);
+
+    const fetchDomains = async () => {
+        try {
+            const response = await fetch('/api/dashboard/domains');
+            if (!response.ok) throw new Error('Failed to fetch domains');
+            
+            const data = await response.json();
+            setDomains(data);
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Failed to load domains');
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission
+        setLoading(true);
+
+        // Validate form data
+        if (!formData.name || !formData.date || !formData.domain || 
+            !formData.studentsParticipated || !formData.reportLink) {
+            toast.error('Please fill in all fields');
+            setLoading(false);
+            return;
+        }
+        
+        try {
+            // Log data being sent
+            console.log('Sending data:', {
+                name: formData.name,
+                date: formData.date,
+                domain_id: formData.domain,
+                studentsParticipated: formData.studentsParticipated,
+                reportLink: formData.reportLink
+            });
+
+            const response = await fetch('/api/dashboard/uploadactivities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    date: formData.date,
+                    domain_id: parseInt(formData.domain),
+                    studentsParticipated: parseInt(formData.studentsParticipated),
+                    reportLink: formData.reportLink
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to upload activity');
+            }
+
+            toast.success('Activity uploaded successfully!');
+            
+            // Reset form
+            setFormData({
+                name: '',
+                date: '',
+                domain: '',
+                studentsParticipated: '',
+                reportLink: ''
+            });
+
+            // Reset file input if it exists
+            const fileInput = document.getElementById('report');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+
+        } catch (error) {
+            console.error('Error uploading activity:', error);
+            toast.error(error.message || 'Failed to upload activity');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -55,6 +137,11 @@ export default function UploadActivities() {
                             required
                         >
                             <option value="">Select Domain</option>
+                            {domains.map((domain) => (
+                                <option key={domain.id} value={domain.id}>
+                                    {domain.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
@@ -70,22 +157,25 @@ export default function UploadActivities() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="report">Activity Report (PDF)</label>
+                        <label htmlFor="report">Activity Report Link</label>
                         <input
-                            type="file"
+                            type="url"
                             id="report"
-                            accept=".pdf"
-                            onChange={(e) => setFormData({...formData, reportFile: e.target.files[0]})}
+                            placeholder="Enter report URL"
+                            value={formData.reportLink}
+                            onChange={(e) => setFormData({...formData, reportLink: e.target.value})}
                             required
                         />
                     </div>
 
                     <div className="form-actions">
-                        <button type="submit" className="submit-btn">Upload Activity</button>
+                        <button type="submit" className="submit-btn" disabled={loading}>
+                            {loading ? 'Uploading...' : 'Upload Activity'}
+                        </button>
                         <button type="button" className="cancel-btn">Cancel</button>
                     </div>
                 </form>
             </div>
         </div>
     );
-} 
+}
