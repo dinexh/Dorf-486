@@ -10,21 +10,22 @@ import { useAuth } from '@/contexts/AuthContext';
 export default function Login() {
     const router = useRouter();
     const { checkAuth } = useAuth();
-    const [captchaValue, setCaptchaValue] = useState(null);
+    const [captchaValue, setCaptchaValue] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        // Generate a 4-digit captcha value
-        const generateCaptcha = () => {
-            return Math.floor(1000 + Math.random() * 9000);
-        };
-        setCaptchaValue(generateCaptcha());
-    }, []);
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+    const generateCaptcha = () => {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let captcha = '';
+        for(let i = 0; i < 6; i++) {
+            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        setCaptchaValue(captcha);
     };
+
+    useEffect(() => {
+        generateCaptcha();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,9 +39,10 @@ export default function Login() {
             return;
         }
 
-        if (!enteredCaptcha || parseInt(enteredCaptcha) !== captchaValue) {
+        // Case-insensitive captcha validation
+        if (!enteredCaptcha || enteredCaptcha.toUpperCase() !== captchaValue) {
             toast.error('Invalid captcha code');
-            setCaptchaValue(Math.floor(1000 + Math.random() * 9000));
+            generateCaptcha();
             return;
         }
 
@@ -53,7 +55,7 @@ export default function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ idNumber, password }),
-                credentials: 'include' // Important: include credentials
+                credentials: 'include'
             });
 
             const data = await response.json();
@@ -62,21 +64,24 @@ export default function Login() {
                 throw new Error(data.error || 'Login failed');
             }
 
-            // Update auth context first
+            // First update auth context and wait for it
             await checkAuth();
-
-            // Use replace instead of push
-            const redirectPath = data.user.role === 'superadmin' 
-                ? '/dashboard/superadmin' 
-                : '/dashboard/admin';
-
-            router.replace(redirectPath);
             
-            // Show success message after navigation is queued
+            // Small delay to ensure state is updated
+            await new Promise(resolve => setTimeout(resolve, 100));
+
             toast.success('Login successful');
+
+            // Then redirect
+            if (data.user.role === 'superadmin') {
+                router.push('/dashboard/superadmin');
+            } else {
+                router.push('/dashboard/admin');
+            }
 
         } catch (error) {
             toast.error(error.message || 'Login failed. Please try again.');
+            generateCaptcha();
         } finally {
             setIsLoading(false);
         }
@@ -102,7 +107,12 @@ export default function Login() {
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="email">EMP/ERP ID</label>
-                                <input type="text" id="id" name="id" disabled={isLoading} />
+                                <input 
+                                    type="text" 
+                                    id="id" 
+                                    name="id" 
+                                    disabled={isLoading} 
+                                />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
@@ -115,27 +125,40 @@ export default function Login() {
                                     />
                                     <span 
                                         className="password-toggle" 
-                                        onClick={togglePasswordVisibility}
+                                        onClick={() => setShowPassword(!showPassword)}
                                     >
                                         {showPassword ? "👁️" : "👁️‍🗨️"}
                                     </span>
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="captive">ReCaptive : {captchaValue || 'Loading...'}</label>
-                                <input 
-                                    type="text" 
-                                    id="captive" 
-                                    name="captive" 
-                                    placeholder="Enter the 4-digit code above"
-                                    disabled={isLoading}
-                                />
+                                <label htmlFor="captive">Security Code: {captchaValue}</label>
+                                <div className="captcha-container">
+                                    <input 
+                                        type="text" 
+                                        id="captive" 
+                                        name="captive" 
+                                        placeholder="Enter the code above"
+                                        maxLength={6}
+                                        disabled={isLoading}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={generateCaptcha}
+                                        className="refresh-captcha"
+                                        disabled={isLoading}
+                                    >
+                                        ↻
+                                    </button>
+                                </div>
                             </div>
                             <div className="form-group-button">
                                 <button type="submit" disabled={isLoading}>
                                     {isLoading ? 'Logging in...' : 'Login'}
                                 </button>
-                                <p onClick={() => router.push('/auth/forgot-password')}>Forgot Password?</p>
+                                <p onClick={() => router.push('/auth/forgot-password')}>
+                                    Forgot Password?
+                                </p>
                             </div>
                         </form>
                     </div>
@@ -148,3 +171,4 @@ export default function Login() {
         </div>
     );
 }
+

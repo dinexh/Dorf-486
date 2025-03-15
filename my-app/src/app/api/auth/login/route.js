@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import mysql from "@/lib/db";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import pool from '@/lib/db';
 
 export async function POST(req) {
@@ -42,7 +42,7 @@ export async function POST(req) {
             );
         }
 
-        // Single token with 1 hour expiry
+        // Generate single token with 1 hour expiry
         const token = jwt.sign(
             {
                 userId: user.id,
@@ -52,7 +52,6 @@ export async function POST(req) {
             { expiresIn: '1h' }
         );
 
-        // Create response
         const response = NextResponse.json({
             message: "Login successful",
             user: {
@@ -62,8 +61,7 @@ export async function POST(req) {
                 role: user.role
             }
         });
-        
-        // Set cookie
+
         response.cookies.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

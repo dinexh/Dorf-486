@@ -254,3 +254,48 @@
     font-size: 0.8rem;
     color: #2c5530;
 }
+
+.form-group .high-security {
+    border-color: #ff4444;
+}
+
+.warning {
+    color: #ff4444;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.refresh-captcha {
+    background: none;
+    border: none;
+    color: #2c5530;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 1.2em;
+    transition: transform 0.2s;
+}
+
+.refresh-captcha:hover {
+    transform: rotate(90deg);
+}
+
+.captcha-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.high-security {
+    border-color: #ff4444;
+}
+
+.captcha-warning {
+    color: #ff4444;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+input[disabled], button[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
