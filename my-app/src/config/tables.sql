@@ -8,8 +8,10 @@ CREATE TABLE User (
     idNumber VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     role ENUM('superadmin', 'admin') DEFAULT 'admin',
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
 
 -- Activities Table
