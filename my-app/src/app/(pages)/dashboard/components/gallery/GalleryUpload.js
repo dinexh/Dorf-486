@@ -31,11 +31,6 @@ export default function GalleryUpload() {
         e.preventDefault();
 
         try {
-            console.log('Sending data:', {
-                domain: formData.domain,
-                imageLink: formData.imageLink.trim()
-            });
-
             const response = await fetch('/api/dashboard/gallery', {
                 method: 'POST',
                 headers: {
@@ -50,7 +45,6 @@ export default function GalleryUpload() {
             if (!response.ok) throw new Error('Failed to upload image');
 
             const result = await response.json();
-            console.log('Upload successful:', result);
             toast.success('Image uploaded successfully!');
         } catch (error) {
             console.error('Error uploading image:', error);

@@ -3,21 +3,18 @@ import { jwtVerify } from 'jose';
 
 export async function middleware(request) {
     const path = request.nextUrl.pathname;
-    console.log('Current path:', path);
 
     // Define public paths
     const isPublicPath = path === '/auth/login' || 
                         path === '/auth/forgot-password';
 
     const token = request.cookies.get('token')?.value;
-    console.log('Token exists:', !!token);
 
     try {
         // If token exists, verify it
         if (token) {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET);
             const { payload } = await jwtVerify(token, secret);
-            console.log('Token verified, role:', payload.role);
 
             // If on public path and token is valid, redirect to dashboard
             if (isPublicPath) {

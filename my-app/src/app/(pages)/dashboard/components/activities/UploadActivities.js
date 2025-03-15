@@ -45,15 +45,6 @@ export default function UploadActivities() {
         }
         
         try {
-            // Log data being sent
-            console.log('Sending data:', {
-                name: formData.name,
-                date: formData.date,
-                domain_id: formData.domain,
-                studentsParticipated: formData.studentsParticipated,
-                reportLink: formData.reportLink
-            });
-
             const response = await fetch('/api/dashboard/uploadactivities', {
                 method: 'POST',
                 headers: {

@@ -11,7 +11,6 @@ export async function GET(request) {
         const [columns] = await connection.execute(
             'SHOW COLUMNS FROM User WHERE Field = "status"'
         );
-        console.log('Status column structure:', columns[0]);
         
         // Query to get all admins and superadmins
         const [admins] = await connection.execute(
@@ -49,7 +48,6 @@ export async function PUT(request) {
         const [columns] = await connection.execute(
             'SHOW COLUMNS FROM User WHERE Field = "status"'
         );
-        console.log('Status column structure:', columns[0]);
 
         // First check if the admin exists and get current data
         const [existingAdmin] = await connection.execute(

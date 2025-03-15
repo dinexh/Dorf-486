@@ -19,8 +19,6 @@ export async function POST(req) {
 
     connection.release();
 
-    console.log('Received data:', { domain, imageLink });
-
     return NextResponse.json({ success: true, message: 'Image added successfully' });
   } catch (error) {
     console.error('Error uploading image:', error);

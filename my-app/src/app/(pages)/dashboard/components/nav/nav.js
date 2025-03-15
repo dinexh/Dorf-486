@@ -6,8 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 const DashboardNav = () => {
     const { user, logout, loading } = useAuth();
     
-    console.log('Current user:', user);
-    console.log('Loading state:', loading);
+    // console.log('Current user:', user);
+    // console.log('Loading state:', loading);
 
     return (
         <div className="dashboard-nav">
