@@ -28,7 +28,6 @@ CREATE TABLE Activity (
 -- Gallery Table
 CREATE TABLE Gallery (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    heroImageLink TEXT,
     imageLink TEXT NOT NULL,
     domain_id INT NOT NULL,
     FOREIGN KEY (domain_id) REFERENCES Domain(id)

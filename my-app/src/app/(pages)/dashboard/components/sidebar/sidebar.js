@@ -136,7 +136,7 @@ export default function Sidebar({
                     </li>
                     <li className='menu-item'>
                         <a onClick={onUpdateawardClick} className="menu-link" style={{ cursor: 'pointer' }}>
-                            <FaAward className="menu-icon" />x
+                            <FaAward className="menu-icon" />
                             <span>Awards</span>
                         </a>
                     </li>

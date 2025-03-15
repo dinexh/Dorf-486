@@ -1,30 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import './Gallery.css';
 
 export default function GalleryUpload() {
     const [formData, setFormData] = useState({
         domain: '',
-        isHeroImage: false,
-        images: []
+        imageLink: '' // Single image link
     });
+    const [domains, setDomains] = useState([]);
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        setFormData(prev => ({
-            ...prev,
-            images: files
-        }));
-    };
+    useEffect(() => {
+        const fetchDomains = async () => {
+            try {
+                const response = await fetch('/api/dashboard/domains');
+                if (!response.ok) throw new Error('Failed to fetch domains');
+                const data = await response.json();
+                setDomains(data);
+            } catch (error) {
+                console.error('Error fetching domains:', error);
+                toast.error('Failed to load domains');
+            }
+        };
 
-    const handleSubmit = (e) => {
+        fetchDomains();
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission
+
+        try {
+            console.log('Sending data:', {
+                domain: formData.domain,
+                imageLink: formData.imageLink.trim()
+            });
+
+            const response = await fetch('/api/dashboard/gallery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    domain: formData.domain,
+                    imageLink: formData.imageLink.trim() // Ensure no empty link
+                }),
+            });
+
+            if (!response.ok) throw new Error('Failed to upload image');
+
+            const result = await response.json();
+            console.log('Upload successful:', result);
+            toast.success('Image uploaded successfully!');
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            toast.error('Failed to upload image');
+        }
     };
 
     return (
         <div className="gallery-component">
+            <Toaster position="top-right" reverseOrder={false} />
             <div className="gallery-header">
                 <h1>Upload to Gallery</h1>
             </div>
@@ -39,44 +75,28 @@ export default function GalleryUpload() {
                             required
                         >
                             <option value="">Select Domain</option>
+                            {domains.map((domain) => (
+                                <option key={domain.id} value={domain.id}>
+                                    {domain.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
-                    <div className="form-group checkbox-group">
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={formData.isHeroImage}
-                                onChange={(e) => setFormData({...formData, isHeroImage: e.target.checked})}
-                            />
-                            Set as Hero Image
-                        </label>
-                    </div>
-
                     <div className="form-group">
-                        <label htmlFor="images">Upload Images</label>
+                        <label htmlFor="imageLink">Image URL</label>
                         <input
-                            type="file"
-                            id="images"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange}
+                            type="url"
+                            id="imageLink"
+                            placeholder="Enter image URL"
+                            value={formData.imageLink}
+                            onChange={(e) => setFormData({...formData, imageLink: e.target.value})}
                             required
                         />
                     </div>
 
-                    {formData.images.length > 0 && (
-                        <div className="image-preview-grid">
-                            {Array.from(formData.images).map((file, index) => (
-                                <div key={index} className="image-preview">
-                                    <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} />
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="form-actions">
-                        <button type="submit" className="submit-btn">Upload Images</button>
+                    <div className="form-gallery-upload-actions">
+                        <button type="submit">Add Image</button>
                         <button type="button" className="cancel-btn">Cancel</button>
                     </div>
                 </form>
