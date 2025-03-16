@@ -1,52 +1,193 @@
-.dashboard-stats {
-    padding: 2rem;
+.dashboard-container {
+    min-height: 100vh;;
 }
-.stats-header {
-    width: 100%;
+
+.dashboard-header {
     margin-bottom: 2rem;
-    text-align: center;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.stats-header h1 {
-    color: #2D3748;
-    font-size: 2rem;
-    margin-bottom: 1rem;
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
 }
-.stats-overview {
+
+.header-content h1 {
+    color: #10B981;
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.stats-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 2rem;
+    max-width: 1400px;
+    margin: 0 auto 2rem auto;
 }
+
 .stat-card {
     background: white;
-    border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
 }
-.stat-card h3 {
-    color: #4A5568;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
+
+.stat-card:hover {
+    transform: translateY(-2px);
 }
-.stat-card .value {
-    color: #48BB78;
-    font-size: 2rem;
-    font-weight: bold;
+
+.stat-icon {
+    background: #D1FAE5;
+    color: #10B981;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
 }
-.charts-grid {
+
+.stat-info h3 {
+    color: #6B7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0 0 0.25rem 0;
+}
+
+.stat-info .value {
+    color: #1F2937;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.charts-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
 }
-.chart-container {
+
+.chart-card {
     background: white;
-    border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    height: 400px;
 }
-.chart-container h3 {
-    color: #4A5568;
+
+.chart-card.wide {
+    grid-column: 1 / -1;
+    height: 300px;
+}
+
+.chart-card h3 {
+    color: #374151;
     font-size: 1rem;
-    margin-bottom: 1rem;
-    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.activity-list {
+    height: calc(100% - 3rem);
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-name {
+    color: #1F2937;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.activity-date {
+    color: #6B7280;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.activity-participants {
+    color: #10B981;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.refresh-btn {
+    background: #10B981;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+    background: #059669;
+    transform: rotate(180deg);
+}
+
+.loader {
+    border: 3px solid #D1FAE5;
+    border-radius: 50%;
+    border-top: 3px solid #10B981;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1024px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .chart-card {
+        padding: 1rem;
+    }
+    
+    .header-content h1 {
+        font-size: 1.5rem;
+    }
 }
