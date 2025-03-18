@@ -73,23 +73,42 @@
 }
 
 .gallery-component-in-main-domains {
-    width: 100%;
+    width: 90%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-    margin-top: 0.5rem;
-    /* background-color: red; */
+    gap: 12px;
+    margin-top: 1rem;
+    padding: 0 1rem;
 }
 
 .gallery-component-in-main-domains button {
-    background-color: green;
+    background-color: rgba(220, 255, 220, 0.4);
     border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
+    border-radius: 25px;
+    padding: 8px 20px;
     font-size: 16px;
-    color: white;
+    color: #006400;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
+
+.gallery-component-in-main-domains button:hover {
+    background-color: green;
+    /* transform: translateY(-2px); */
+    color: white;
+}
+
+.gallery-component-in-main-domains button:active {
+    transform: translateY(0);
+}
+
+.gallery-component-in-main-domains button.active {
+    background-color: #008000;
+    color: white;
+}
+
 .gallery-component-in-images-grid {
     width: 100%;
     margin-top: 1rem;
