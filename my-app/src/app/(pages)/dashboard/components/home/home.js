@@ -1,19 +1,9 @@
 'use client';
 import './home.css';
 import { useState, useEffect } from 'react';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    PointElement,
-    LineElement,
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import { FiRefreshCw, FiUsers, FiAward, FiActivity, FiBarChart2 } from 'react-icons/fi';
 
 // Register ChartJS components
 ChartJS.register(
@@ -30,175 +20,242 @@ ChartJS.register(
 
 const Home = () => {
     const [stats, setStats] = useState({
-        totalActivities: 0,
-        totalStudents: 0,
+        overview: { totalActivities: 0, totalStudents: 0, totalDomains: 0 },
         domainStats: [],
-        monthlyActivities: [],
+        yearlyStats: [],
+        monthlyStats: [],
+        topActivities: []
     });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Simulated data - Replace with actual API calls
-    useEffect(() => {
-        // Simulated API response
-        const data = {
-            totalActivities: 156,
-            totalStudents: 2450,
-            domainStats: [
-                { domain: 'Technology', count: 45, students: 850 },
-                { domain: 'Healthcare', count: 32, students: 620 },
-                { domain: 'Education', count: 28, students: 480 },
-                { domain: 'Environment', count: 25, students: 320 },
-                { domain: 'Social Work', count: 26, students: 180 },
-            ],
-            monthlyActivities: [
-                { month: 'Jan', activities: 12, students: 230 },
-                { month: 'Feb', activities: 15, students: 280 },
-                { month: 'Mar', activities: 18, students: 320 },
-                { month: 'Apr', activities: 14, students: 260 },
-                { month: 'May', activities: 16, students: 290 },
-                { month: 'Jun', activities: 20, students: 350 },
-            ],
-        };
-        setStats(data);
-    }, []);
-
-    // Chart configurations
-    const domainChartData = {
-        labels: stats.domainStats.map(item => item.domain),
-        datasets: [
-            {
-                label: 'Activities per Domain',
-                data: stats.domainStats.map(item => item.count),
-                backgroundColor: [
-                    'rgba(72, 187, 120, 0.7)',
-                    'rgba(56, 161, 105, 0.7)',
-                    'rgba(47, 133, 90, 0.7)',
-                    'rgba(39, 110, 75, 0.7)',
-                    'rgba(34, 84, 61, 0.7)',
-                ],
-                borderColor: [
-                    'rgba(72, 187, 120, 1)',
-                    'rgba(56, 161, 105, 1)',
-                    'rgba(47, 133, 90, 1)',
-                    'rgba(39, 110, 75, 1)',
-                    'rgba(34, 84, 61, 1)',
-                ],
-                borderWidth: 1,
-            },
-        ],
+    const theme = {
+        colors: {
+            primary: '#10B981',
+            secondary: '#059669',
+            tertiary: '#047857',
+            light: '#D1FAE5',
+            text: '#1F2937',
+            background: '#F9FAFB'
+        },
+        charts: {
+            domain: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22'],
+            activities: '#10B981',
+            students: '#059669'
+        }
     };
 
-    const monthlyChartData = {
-        labels: stats.monthlyActivities.map(item => item.month),
+    const fetchDashboardStats = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('/api/dashboard/stats');
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to fetch dashboard stats');
+            }
+            
+            setStats(result.data);
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            console.error('Dashboard error:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDashboardStats();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="dashboard-stats loading">
+                <div className="loader"></div>
+                <p>Loading dashboard statistics...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="dashboard-stats error">
+                <p>Error: {error}</p>
+                <button onClick={fetchDashboardStats} className="refresh-btn">
+                    <FiRefreshCw /> Try Again
+                </button>
+            </div>
+        );
+    }
+
+    const domainChartData = {
+        labels: stats.domainStats.map(d => d.domainName),
+        datasets: [{
+            label: 'Students per Domain',
+            data: stats.domainStats.map(d => d.studentCount),
+            backgroundColor: theme.charts.domain,
+            borderWidth: 0
+        }]
+    };
+
+    const yearlyComparisonData = {
+        labels: stats.yearlyStats.map(y => y.year),
         datasets: [
             {
                 label: 'Activities',
-                data: stats.monthlyActivities.map(item => item.activities),
-                borderColor: 'rgba(72, 187, 120, 1)',
-                backgroundColor: 'rgba(72, 187, 120, 0.2)',
-                tension: 0.4,
+                data: stats.yearlyStats.map(y => y.activityCount),
+                backgroundColor: theme.charts.activities,
+                borderColor: theme.charts.activities,
+                type: 'line',
+                fill: false
             },
             {
                 label: 'Students',
-                data: stats.monthlyActivities.map(item => item.students),
-                borderColor: 'rgba(56, 161, 105, 1)',
-                backgroundColor: 'rgba(56, 161, 105, 0.2)',
-                tension: 0.4,
-            },
-        ],
+                data: stats.yearlyStats.map(y => y.studentCount),
+                backgroundColor: theme.charts.students,
+                borderColor: theme.charts.students,
+                type: 'bar'
+            }
+        ]
     };
 
-    const studentsByDomainData = {
-        labels: stats.domainStats.map(item => item.domain),
+    const monthlyTrendsData = {
+        labels: stats.monthlyStats.map(m => m.month),
         datasets: [
             {
-                label: 'Students by Domain',
-                data: stats.domainStats.map(item => item.students),
-                backgroundColor: [
-                    'rgba(72, 187, 120, 0.7)',
-                    'rgba(56, 161, 105, 0.7)',
-                    'rgba(47, 133, 90, 0.7)',
-                    'rgba(39, 110, 75, 0.7)',
-                    'rgba(34, 84, 61, 0.7)',
-                ],
-                borderColor: [
-                    'rgba(72, 187, 120, 1)',
-                    'rgba(56, 161, 105, 1)',
-                    'rgba(47, 133, 90, 1)',
-                    'rgba(39, 110, 75, 1)',
-                    'rgba(34, 84, 61, 1)',
-                ],
-                borderWidth: 1,
-            },
-        ],
+                label: 'Activities',
+                data: stats.monthlyStats.map(m => m.activityCount),
+                borderColor: theme.charts.activities,
+                backgroundColor: `${theme.charts.activities}20`,
+                fill: true
+            }
+        ]
     };
 
     return (
-        <div className="dashboard-stats">
-            <div className="stats-header">
-                <h1>Statistics Overview</h1>
+        <div className="dashboard-container">
+            <div className="dashboard-header">
+                <h1>Analytics Dashboard</h1>
+                <button onClick={fetchDashboardStats} className="refresh-btn">
+                    <FiRefreshCw />
+                </button>
             </div>
 
-            <div className="stats-overview">
+            <div className="stats-grid">
                 <div className="stat-card">
-                    <h3>Total Activities</h3>
-                    <div className="value">{stats.totalActivities}</div>
+                    <div className="stat-icon">
+                        <FiActivity />
+                    </div>
+                    <div className="stat-info">
+                        <h3>Total Activities</h3>
+                        <div className="value">{stats.overview.totalActivities.toLocaleString()}</div>
+                    </div>
                 </div>
+
                 <div className="stat-card">
-                    <h3>Total Students Participated</h3>
-                    <div className="value">{stats.totalStudents}</div>
+                    <div className="stat-icon">
+                        <FiUsers />
+                    </div>
+                    <div className="stat-info">
+                        <h3>Total Students</h3>
+                        <div className="value">{stats.overview.totalStudents.toLocaleString()}</div>
+                    </div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-icon">
+                        <FiAward />
+                    </div>
+                    <div className="stat-info">
+                        <h3>Active Domains</h3>
+                        <div className="value">{stats.overview.totalDomains}</div>
+                    </div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-icon">
+                        <FiBarChart2 />
+                    </div>
+                    <div className="stat-info">
+                        <h3>Avg. Participation</h3>
+                        <div className="value">
+                            {stats.overview.totalActivities ? 
+                                Math.round(stats.overview.totalStudents / stats.overview.totalActivities) 
+                                : 0}
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div className="charts-grid">
-                <div className="chart-container">
-                    <h3>Activities by Domain</h3>
+                <div className="chart-card">
+                    <h3>Domain-wise Distribution</h3>
                     <Doughnut 
                         data={domainChartData}
                         options={{
+                            responsive: true,
                             plugins: {
                                 legend: {
                                     position: 'bottom',
-                                },
-                            },
-                            responsive: true,
-                            maintainAspectRatio: true,
+                                    labels: { padding: 20 }
+                                }
+                            }
                         }}
                     />
                 </div>
-                <div className="chart-container">
-                    <h3>Students by Domain</h3>
+
+                <div className="chart-card">
+                    <h3>Yearly Comparison</h3>
                     <Bar 
-                        data={studentsByDomainData}
+                        data={yearlyComparisonData}
                         options={{
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                },
-                            },
                             responsive: true,
-                            maintainAspectRatio: true,
                             scales: {
-                                y: {
-                                    beginAtZero: true,
-                                },
-                            },
+                                y: { beginAtZero: true }
+                            }
                         }}
                     />
                 </div>
-                <div className="chart-container" style={{ gridColumn: '1 / -1' }}>
+
+                <div className="chart-card">
                     <h3>Monthly Activity Trends</h3>
                     <Line 
-                        data={monthlyChartData}
+                        data={monthlyTrendsData}
                         options={{
                             responsive: true,
-                            maintainAspectRatio: true,
                             scales: {
-                                y: {
-                                    beginAtZero: true,
-                                },
+                                y: { beginAtZero: true }
                             },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
                         }}
                     />
+                </div>
+
+                <div className="chart-card">
+                    <h3>Recent Participations</h3>
+                    <div className="top-activities-list">
+                        {stats.topActivities.map((activity, index) => (
+                            <div key={index} className="activity-item">
+                                <div className="activity-rank">{index + 1}</div>
+                                <div className="activity-details">
+                                    <div className="activity-name">{activity.name}</div>
+                                    <div className="activity-meta">
+                                        <span className="activity-domain">{activity.domain}</span>
+                                        <span className="activity-date">{activity.date}</span>
+                                    </div>
+                                </div>
+                                <div className="activity-participants">
+                                    <FiUsers className="icon" />
+                                    {activity.studentsParticipated}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

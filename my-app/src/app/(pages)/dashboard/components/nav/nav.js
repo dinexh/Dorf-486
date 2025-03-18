@@ -2,7 +2,8 @@
 import './nav.css';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
-
+import Image from 'next/image';
+import logo from '../../../../assets/logo.png';
 const DashboardNav = () => {
     const { user, logout, loading } = useAuth();
     
@@ -12,7 +13,14 @@ const DashboardNav = () => {
     return (
         <div className="dashboard-nav">
             <div className="dashboard-nav-one">
-                <h2>Smart Village Revolution Admin Portal | KLEF </h2>
+                <Image 
+                    src={logo} // Make sure to add your logo to public folder
+                    alt="SVR Logo"
+                    width={32}
+                    height={32}
+                    className="dashboard-nav-logo"
+                />
+                <h2>Smart Village Revolution {user?.role === 'superadmin' ? 'Super Admin' : 'Admin'} | KLEF</h2>
             </div>
             <div className="dashboard-nav-two">
                 <h2>

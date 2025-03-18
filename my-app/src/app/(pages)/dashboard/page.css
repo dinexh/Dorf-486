@@ -1,9 +1,9 @@
 .dashboard-component {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
-    overflow: hidden;
+    position: relative;
 }
 
 .dashboard-component-nav {
@@ -12,19 +12,23 @@
     left: 0;
     right: 0;
     z-index: 100;
+    height: 60px;
 }
 
 .dashboard-component-main {
     display: flex;
-    margin-top: 64px; /* Height of nav */
-    height: calc(100vh - 114px); /* Subtract nav and footer height */
+    padding-top: 55px; /* Change from margin-top to padding-top */
+    min-height: calc(100vh - 90px);
     width: 100%;
 }
 
-.dashboard-component-main > div:last-child {
+.main-content {
     flex: 1;
-    padding: 2rem;
+    padding: 20px;
     overflow-y: auto;
+    background: #fff;
+    margin-left: 250px; /* Width of sidebar */
+    margin-bottom: 35px; /* Height of footer */
 }
 
 .dashboard-component-footer {
@@ -32,13 +36,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    height: 35px;
+    background-color: #1a472a;
     z-index: 100;
-}
-
-/* Responsive Design */
-@media (max-width: 576px) {
-    .dashboard-component-main {
-        flex-direction: column;
-    }
-}
-
+} 

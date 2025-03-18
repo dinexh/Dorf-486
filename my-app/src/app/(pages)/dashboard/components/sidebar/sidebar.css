@@ -1,32 +1,59 @@
+/* Base sidebar styles */
 .sidebar {
     width: 250px;
-    background: lightgreen;
-    padding: 20px;
-    border-right: 1px solid green;
+    min-width: 250px;
+    background-color: black;
+    position: fixed;
+    left: 0;
+    top: 55px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+    height: 100%;
+    /* margin-top: 1vh; */
 }
 
+/* Menu list styles */
 .menu-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
+/* Menu item styles */
 .menu-item {
-    margin-bottom: 10px;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Menu link styles */
 .menu-link {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px 20px;
     text-decoration: none;
-    color: #333;
-    cursor: pointer;
-}
-.menu-icon {
-    margin-right: 10px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    width: 100%;
 }
 
+.menu-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Icon styles */
+.menu-icon {
+    margin-right: 12px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dropdown styles */
 .dropdown-trigger {
     width: 100%;
     justify-content: space-between;
@@ -34,28 +61,75 @@
 
 .dropdown-icon {
     margin-left: auto;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.menu-group {
-    position: relative;
-}
-
+/* Submenu styles */
 .submenu {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0;
+    padding: 4px 0;
     list-style: none;
-    padding: 0;
-    margin: 5px 0 0 20px;
-    display: block; /* Always block since we control visibility with React */
 }
 
 .submenu-link {
     display: flex;
     align-items: center;
-    padding: 8px;
+    padding: 10px 20px 10px 52px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
     text-decoration: none;
-    color: #666;
+    transition: all 0.2s;
 }
 
 .submenu-link:hover {
-    background: #e0e0e0;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.submenu-link .menu-icon {
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+/* Active states */
+.menu-link.active,
+.submenu-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 500;
+}
+
+/* Menu group */
+.menu-group {
+    position: relative;
+}
+
+/* Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+    }
 }
