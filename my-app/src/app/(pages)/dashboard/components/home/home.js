@@ -3,7 +3,7 @@ import './home.css';
 import { useState, useEffect } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import { FiRefreshCw, FiUsers, FiCalendar, FiAward, FiTrendingUp } from 'react-icons/fi';
+import { FiRefreshCw, FiUsers, FiAward, FiActivity, FiBarChart2 } from 'react-icons/fi';
 
 // Register ChartJS components
 ChartJS.register(
@@ -20,25 +20,29 @@ ChartJS.register(
 
 const Home = () => {
     const [stats, setStats] = useState({
-        totalActivities: 0,
-        totalStudents: 0,
-        totalDomains: 0,
-        recentActivities: [],
-        topDomains: [],
-        monthlyGrowth: [],
-        upcomingEvents: 0
+        overview: { totalActivities: 0, totalStudents: 0, totalDomains: 0 },
+        domainStats: [],
+        yearlyStats: [],
+        monthlyStats: [],
+        topActivities: []
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const chartColors = {
-        green: {
+    const theme = {
+        colors: {
             primary: '#10B981',
-            secondary: '#D1FAE5',
-            gradient: ['#059669', '#047857', '#065F46', '#064E3B']
+            secondary: '#059669',
+            tertiary: '#047857',
+            light: '#D1FAE5',
+            text: '#1F2937',
+            background: '#F9FAFB'
         },
-        text: '#1F2937',
-        grid: '#E5E7EB'
+        charts: {
+            domain: ['#10B981', '#059669', '#047857', '#065F46', '#064E3B', '#022C22'],
+            activities: '#10B981',
+            students: '#059669'
+        }
     };
 
     const fetchDashboardStats = async () => {
@@ -85,48 +89,67 @@ const Home = () => {
         );
     }
 
-    const activityTrendsData = {
-        labels: stats.monthlyGrowth.map(item => item.month),
+    const domainChartData = {
+        labels: stats.domainStats.map(d => d.domainName),
+        datasets: [{
+            label: 'Students per Domain',
+            data: stats.domainStats.map(d => d.studentCount),
+            backgroundColor: theme.charts.domain,
+            borderWidth: 0
+        }]
+    };
+
+    const yearlyComparisonData = {
+        labels: stats.yearlyStats.map(y => y.year),
         datasets: [
             {
-                label: 'Activity Growth',
-                data: stats.monthlyGrowth.map(item => item.count),
-                borderColor: chartColors.green.primary,
-                backgroundColor: `${chartColors.green.primary}20`,
-                fill: true,
-                tension: 0.4
+                label: 'Activities',
+                data: stats.yearlyStats.map(y => y.activityCount),
+                backgroundColor: theme.charts.activities,
+                borderColor: theme.charts.activities,
+                type: 'line',
+                fill: false
+            },
+            {
+                label: 'Students',
+                data: stats.yearlyStats.map(y => y.studentCount),
+                backgroundColor: theme.charts.students,
+                borderColor: theme.charts.students,
+                type: 'bar'
             }
         ]
     };
 
-    const domainDistributionData = {
-        labels: stats.topDomains.map(item => item.name),
-        datasets: [{
-            data: stats.topDomains.map(item => item.count),
-            backgroundColor: chartColors.green.gradient,
-            borderWidth: 0
-        }]
+    const monthlyTrendsData = {
+        labels: stats.monthlyStats.map(m => m.month),
+        datasets: [
+            {
+                label: 'Activities',
+                data: stats.monthlyStats.map(m => m.activityCount),
+                borderColor: theme.charts.activities,
+                backgroundColor: `${theme.charts.activities}20`,
+                fill: true
+            }
+        ]
     };
 
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
-                <div className="header-content">
-                    <h1>Analytics Dashboard</h1>
-                    <button onClick={fetchDashboardStats} className="refresh-btn" title="Refresh data">
-                        <FiRefreshCw />
-                    </button>
-                </div>
+                <h1>Analytics Dashboard</h1>
+                <button onClick={fetchDashboardStats} className="refresh-btn">
+                    <FiRefreshCw />
+                </button>
             </div>
 
             <div className="stats-grid">
                 <div className="stat-card">
                     <div className="stat-icon">
-                        <FiCalendar />
+                        <FiActivity />
                     </div>
                     <div className="stat-info">
                         <h3>Total Activities</h3>
-                        <div className="value">{stats.totalActivities.toLocaleString()}</div>
+                        <div className="value">{stats.overview.totalActivities.toLocaleString()}</div>
                     </div>
                 </div>
 
@@ -135,8 +158,8 @@ const Home = () => {
                         <FiUsers />
                     </div>
                     <div className="stat-info">
-                        <h3>Student Participations</h3>
-                        <div className="value">{stats.totalStudents.toLocaleString()}</div>
+                        <h3>Total Students</h3>
+                        <div className="value">{stats.overview.totalStudents.toLocaleString()}</div>
                     </div>
                 </div>
 
@@ -146,80 +169,89 @@ const Home = () => {
                     </div>
                     <div className="stat-info">
                         <h3>Active Domains</h3>
-                        <div className="value">{stats.totalDomains}</div>
+                        <div className="value">{stats.overview.totalDomains}</div>
                     </div>
                 </div>
 
                 <div className="stat-card">
                     <div className="stat-icon">
-                        <FiTrendingUp />
+                        <FiBarChart2 />
                     </div>
                     <div className="stat-info">
-                        <h3>Upcoming Events</h3>
-                        <div className="value">{stats.upcomingEvents}</div>
+                        <h3>Avg. Participation</h3>
+                        <div className="value">
+                            {stats.overview.totalActivities ? 
+                                Math.round(stats.overview.totalStudents / stats.overview.totalActivities) 
+                                : 0}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="charts-container">
-                <div className="chart-card wide">
-                    <h3>Activity Growth Trends</h3>
-                    <Line 
-                        data={activityTrendsData}
+            <div className="charts-grid">
+                <div className="chart-card">
+                    <h3>Domain-wise Distribution</h3>
+                    <Doughnut 
+                        data={domainChartData}
                         options={{
                             responsive: true,
-                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { padding: 20 }
+                                }
+                            }
+                        }}
+                    />
+                </div>
+
+                <div className="chart-card">
+                    <h3>Yearly Comparison</h3>
+                    <Bar 
+                        data={yearlyComparisonData}
+                        options={{
+                            responsive: true,
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }}
+                    />
+                </div>
+
+                <div className="chart-card">
+                    <h3>Monthly Activity Trends</h3>
+                    <Line 
+                        data={monthlyTrendsData}
+                        options={{
+                            responsive: true,
+                            scales: {
+                                y: { beginAtZero: true }
+                            },
                             plugins: {
                                 legend: {
                                     display: false
                                 }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        color: chartColors.grid
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false
-                                    }
-                                }
                             }
                         }}
                     />
                 </div>
 
                 <div className="chart-card">
-                    <h3>Domain Distribution</h3>
-                    <Doughnut 
-                        data={domainDistributionData}
-                        options={{
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                    labels: {
-                                        padding: 20,
-                                        usePointStyle: true
-                                    }
-                                }
-                            }
-                        }}
-                    />
-                </div>
-
-                <div className="chart-card">
-                    <h3>Recent Activities</h3>
-                    <div className="activity-list">
-                        {stats.recentActivities.map((activity, index) => (
+                    <h3>Recent Participations</h3>
+                    <div className="top-activities-list">
+                        {stats.topActivities.map((activity, index) => (
                             <div key={index} className="activity-item">
-                                <div className="activity-name">{activity.name}</div>
-                                <div className="activity-date">{activity.date}</div>
+                                <div className="activity-rank">{index + 1}</div>
+                                <div className="activity-details">
+                                    <div className="activity-name">{activity.name}</div>
+                                    <div className="activity-meta">
+                                        <span className="activity-domain">{activity.domain}</span>
+                                        <span className="activity-date">{activity.date}</span>
+                                    </div>
+                                </div>
                                 <div className="activity-participants">
-                                    {activity.participants} participants
+                                    <FiUsers className="icon" />
+                                    {activity.studentsParticipated}
                                 </div>
                             </div>
                         ))}

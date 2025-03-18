@@ -3,94 +3,82 @@ import db from '@/lib/db';
 
 export async function GET() {
   try {
-    // Get total activities
-    const [activitiesCount] = await db.query(`
-      SELECT COUNT(*) as total FROM Activity
-    `);
-    
-    // Get total students participated
-    const [studentsCount] = await db.query(`
-      SELECT SUM(studentsParticipated) as total FROM Activity
-    `);
-
-    // Get total domains
-    const [domainsCount] = await db.query(`
-      SELECT COUNT(*) as total FROM Domain
-    `);
-
-    // Get upcoming events (activities with future dates)
-    const [upcomingCount] = await db.query(`
-      SELECT COUNT(*) as total FROM Activity 
-      WHERE date > CURRENT_DATE()
-    `);
-
-    // Get monthly growth (last 6 months) - Fixed GROUP BY
-    const [monthlyGrowth] = await db.query(`
+    // Get overall statistics
+    const [overallStats] = await db.query(`
       SELECT 
-        DATE_FORMAT(date, '%Y-%m') as yearMonth,
-        DATE_FORMAT(MIN(date), '%b %Y') as month,
-        COUNT(*) as count
-      FROM Activity
-      WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
-      GROUP BY DATE_FORMAT(date, '%Y-%m')
-      ORDER BY yearMonth ASC
+        COUNT(DISTINCT a.id) as totalActivities,
+        SUM(a.studentsParticipated) as totalStudents,
+        COUNT(DISTINCT d.id) as totalDomains
+      FROM Activity a
+      JOIN Domain d ON a.domain_id = d.id
     `);
 
-    // Get top domains by activity count
-    const [topDomains] = await db.query(`
+    // Get domain-wise statistics
+    const [domainStats] = await db.query(`
       SELECT 
-        d.name,
-        COUNT(a.id) as count
+        d.name as domainName,
+        COUNT(a.id) as activityCount,
+        SUM(a.studentsParticipated) as studentCount
       FROM Domain d
       LEFT JOIN Activity a ON d.id = a.domain_id
       GROUP BY d.id, d.name
-      ORDER BY count DESC
-      LIMIT 5
+      ORDER BY studentCount DESC
     `);
 
-    // Get recent activities - No GROUP BY needed
-    const [recentActivities] = await db.query(`
+    // Get year-wise statistics
+    const [yearlyStats] = await db.query(`
       SELECT 
-        name,
-        DATE_FORMAT(date, '%d %b %Y') as date,
-        studentsParticipated as participants
+        YEAR(date) as year,
+        COUNT(id) as activityCount,
+        SUM(studentsParticipated) as studentCount
       FROM Activity
-      WHERE date <= CURRENT_DATE()
-      ORDER BY date DESC
+      GROUP BY YEAR(date)
+      ORDER BY year DESC
+    `);
+
+    // Get month-wise statistics for current year
+    const [monthlyStats] = await db.query(`
+      SELECT 
+        DATE_FORMAT(date, '%M') as month,
+        COUNT(id) as activityCount,
+        SUM(studentsParticipated) as studentCount
+      FROM Activity
+      WHERE YEAR(date) = YEAR(CURRENT_DATE())
+      GROUP BY MONTH(date), DATE_FORMAT(date, '%M')
+      ORDER BY MONTH(date)
+    `);
+
+    // Get top 5 activities by participation
+    const [topActivities] = await db.query(`
+      SELECT 
+        a.name,
+        d.name as domain,
+        a.studentsParticipated,
+        DATE_FORMAT(a.date, '%d %b %Y') as date
+      FROM Activity a
+      JOIN Domain d ON a.domain_id = d.id
+      ORDER BY a.studentsParticipated DESC
       LIMIT 5
     `);
 
-    const formattedStats = {
+    return NextResponse.json({
       success: true,
       data: {
-        totalActivities: activitiesCount[0].total || 0,
-        totalStudents: studentsCount[0].total || 0,
-        totalDomains: domainsCount[0].total || 0,
-        upcomingEvents: upcomingCount[0].total || 0,
-        monthlyGrowth: monthlyGrowth.map(item => ({
-          month: item.month,
-          count: item.count
-        })),
-        topDomains: topDomains.map(item => ({
-          name: item.name,
-          count: item.count
-        })),
-        recentActivities: recentActivities.map(item => ({
-          name: item.name,
-          date: item.date,
-          participants: item.participants
-        }))
+        overview: {
+          totalActivities: overallStats[0].totalActivities || 0,
+          totalStudents: overallStats[0].totalStudents || 0,
+          totalDomains: overallStats[0].totalDomains || 0,
+        },
+        domainStats: domainStats,
+        yearlyStats: yearlyStats,
+        monthlyStats: monthlyStats,
+        topActivities: topActivities
       }
-    };
-
-    return NextResponse.json(formattedStats);
+    });
   } catch (error) {
     console.error('Dashboard stats error:', error);
     return NextResponse.json(
-      { 
-        success: false,
-        error: 'Database error: ' + error.message 
-      },
+      { success: false, error: 'Database error: ' + error.message },
       { status: 500 }
     );
   }
