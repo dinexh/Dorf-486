@@ -231,10 +231,6 @@
     color: #333;
 }
 
-.modal-actions button[type="submit"] {
-    background-color: #2196F3;
-    color: white;
-}
 
 .modal-actions button:hover {
     opacity: 0.9;

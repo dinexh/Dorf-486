@@ -4,8 +4,9 @@ import './sidebar.css';
 import { 
     FaHome, FaGlobe, FaBriefcase, FaTasks, FaImages, 
     FaNewspaper, FaUser, FaUsersCog, FaChevronDown, 
-    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers , FaAward
+    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers , FaAward , FaFocus
 } from 'react-icons/fa';
+import { MdOutlineCenterFocusStrong } from 'react-icons/md';
 
 export default function Sidebar({ 
     userRole, 
@@ -21,13 +22,17 @@ export default function Sidebar({
     onGalleryUploadClick,
     onNewsViewClick,
     onUpdateawardClick,
-    onNewsUploadClick
+    onNewsUploadClick,
+    onHeroImageClick,
+    onFocusAreasClick
 }) {
     const [openMenus, setOpenMenus] = useState({
         admins: false,
         activities: false,
         gallery: false,
-        news: false
+        news: false,
+        heroImage: false,
+        focusAreas: false
     });
 
     const toggleMenu = (menu) => {
@@ -85,16 +90,27 @@ export default function Sidebar({
                         </li>
                     )}
                     <li className="menu-item">
+                        <a onClick={onHeroImageClick} className="menu-link" style={{ cursor: 'pointer' }}>
+                            <FaImages className="menu-icon" />
+                            <span>Hero Image</span>
+                        </a>
+                    </li>
+                    <li className="menu-item">
                         <a onClick={onDomainsClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaGlobe className="menu-icon" />
                             <span>Domains</span>
                         </a>
                     </li>
-
                     <li className="menu-item">
                         <a onClick={onAreasClick} className="menu-link" style={{ cursor: 'pointer' }}>
                             <FaBriefcase className="menu-icon" />
                             <span>Areas of Work</span>
+                        </a>
+                    </li>
+                    <li className="menu-item">
+                        <a onClick={onFocusAreasClick} className="menu-link" style={{ cursor: 'pointer' }}>
+                            <MdOutlineCenterFocusStrong className="menu-icon" />
+                            <span>Focus Areas</span>
                         </a>
                     </li>
 

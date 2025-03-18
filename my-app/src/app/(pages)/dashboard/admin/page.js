@@ -13,6 +13,8 @@ import GalleryView from "../components/gallery/GalleryView";
 import GalleryUpload from "../components/gallery/GalleryUpload";
 import NewsUpload from "../components/news/NewsUpload";
 import Home from "../components/home/home";
+import Hero from "../components/hero/hero";
+import FocusAreas from "../components/focus/focus";
 import './page.css';
 
 export default function AdminDashboard() {
@@ -36,6 +38,10 @@ export default function AdminDashboard() {
                 return <GalleryUpload />;
             case 'news-upload':
                 return <NewsUpload />;
+            case 'hero-image':
+                return <Hero />;
+            case 'focus-areas':
+                return <FocusAreas />;
             default:
                 return <Home />;
         }
@@ -57,6 +63,8 @@ export default function AdminDashboard() {
                     onGalleryViewClick={() => setActiveComponent('gallery-view')}
                     onGalleryUploadClick={() => setActiveComponent('gallery-upload')}
                     onNewsUploadClick={() => setActiveComponent('news-upload')}
+                    onHeroImageClick={() => setActiveComponent('hero-image')}
+                    onFocusAreasClick={() => setActiveComponent('focus-areas')}
                 />
                 <div className="main-content">
                     {renderComponent()}

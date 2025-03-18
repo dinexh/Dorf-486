@@ -16,6 +16,8 @@ import ViewAdmins from "../components/manage-admins/ViewAdmins";
 import AddAdmin from "../components/manage-admins/AddAdmin";
 import Home from "../components/home/home";
 import Updateaward from "../components/awards/Upateawards"; 
+import Hero from "../components/hero/hero";
+import FocusAreas from "../components/focus/focus";
 import './page.css';
 
 export default function SuperAdminDashboard() {
@@ -45,6 +47,10 @@ export default function SuperAdminDashboard() {
                 return <NewsUpload />;
             case 'awards':
                 return <Updateaward />;
+            case 'hero-image':
+                return <Hero />;
+            case 'focus-areas':
+                return <FocusAreas />;
             default:
                 return <Home />;
         }
@@ -71,6 +77,8 @@ export default function SuperAdminDashboard() {
                     onNewsViewClick={() => setActiveComponent('news-view')}
                     onNewsUploadClick={() => setActiveComponent('news-upload')}
                     onUpdateawardClick={() => setActiveComponent('awards')}  // Add this line
+                    onHeroImageClick={() => setActiveComponent('hero-image')}
+                    onFocusAreasClick={() => setActiveComponent('focus-areas')}
                 />
                 <div className="main-content">
                     {renderComponent()}
