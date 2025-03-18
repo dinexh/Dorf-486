@@ -1,53 +1,98 @@
+/* Use very specific selectors and !important for core styles */
+.dashboard-component-main .sidebar,
 .sidebar {
     width: 250px;
-    background: lightgreen;
-    padding: 20px;
-    border-right: 1px solid green;
+    min-width: 250px; /* Prevent shrinking */
+    background: #1a472a; /* Dark green */
+    height: calc(100vh - 90px); /* viewport height - (nav + footer) */
+    position: fixed;
+    left: 0;
+    top: 55px; /* Exactly match nav height */
+    padding: 0; /* Remove padding */
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
 }
 
-.menu-list {
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+/* Menu styles with higher specificity */
+.dashboard-component-main .sidebar .menu-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.menu-item {
-    margin-bottom: 10px;
+.dashboard-component-main .sidebar .menu-item {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.menu-link {
+.dashboard-component-main .sidebar .menu-link {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px 20px;
     text-decoration: none;
-    color: #333;
-    cursor: pointer;
-}
-.menu-icon {
-    margin-right: 10px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    transition: all 0.2s;
 }
 
-.dropdown-trigger {
+.dashboard-component-main .sidebar .menu-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-component-main .sidebar .menu-icon {
+    margin-right: 12px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    width: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-component-main .sidebar .dropdown-trigger {
     width: 100%;
     justify-content: space-between;
 }
 
-.dropdown-icon {
+.dashboard-component-main .sidebar .dropdown-icon {
     margin-left: auto;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.menu-group {
+/* Rotate icon when menu is open */
+.dashboard-component-main .sidebar .menu-group.open .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+.dashboard-component-main .sidebar .menu-group {
     position: relative;
 }
 
-.submenu {
-    list-style: none;
+.dashboard-component-main .sidebar .submenu {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0;
     padding: 0;
-    margin: 5px 0 0 20px;
-    display: block; /* Always block since we control visibility with React */
 }
 
-.submenu-link {
+.dashboard-component-main .sidebar .submenu-link {
+    padding: 10px 20px 10px 52px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     padding: 8px;
@@ -55,7 +100,34 @@
     color: #666;
 }
 
-.submenu-link:hover {
-    background: #e0e0e0;
+.dashboard-component-main .sidebar .submenu-link:hover {
+    background-color: rgba(0, 100, 0, 0.1);
     border-radius: 5px;
+}
+
+/* Adjust main content margin to account for fixed sidebar */
+.main-content {
+    margin-left: 250px; /* Width of sidebar */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+    }
+    .main-content {
+        margin-left: 0;
+    }
 }

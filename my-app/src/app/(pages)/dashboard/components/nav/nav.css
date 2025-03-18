@@ -1,45 +1,57 @@
 .dashboard-nav {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: green;
+    padding: 0 1.5rem;
+    background-color: #1b5e20; /* Dark professional green */
+    color: white;
+    height: 45px; /* Slimmer height */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dashboard-nav-one {
     width: 40%;
     padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .dashboard-nav-one h2 {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 400; /* Lighter weight like reference */
     color: white;
 }
+
+.dashboard-nav-logo {
+    height: 32px;
+    width: auto;
+}
+
 .dashboard-nav-two {
-    width: 20%;
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    margin-right: 1rem;
+    gap: 1.5rem;
 }
 
 .dashboard-nav-two h2 {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: white;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .dashboard-nav-two button {
-    background-color: black;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    font-size: 0.9rem;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dashboard-nav-two button:hover {
+    color: rgba(255, 255, 255, 0.8);
 }
