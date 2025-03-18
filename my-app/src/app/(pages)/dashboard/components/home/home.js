@@ -20,7 +20,12 @@ ChartJS.register(
 
 const Home = () => {
     const [stats, setStats] = useState({
-        overview: { totalActivities: 0, totalStudents: 0, totalDomains: 0 },
+        overview: {
+            totalActivities: 0,
+            totalStudents: 0,
+            totalDomains: 0,
+            avgParticipation: 0
+        },
         domainStats: [],
         yearlyStats: [],
         monthlyStats: [],
@@ -90,21 +95,21 @@ const Home = () => {
     }
 
     const domainChartData = {
-        labels: stats.domainStats.map(d => d.domainName),
+        labels: stats?.domainStats?.map(d => d.domainName) || [],
         datasets: [{
             label: 'Students per Domain',
-            data: stats.domainStats.map(d => d.studentCount),
+            data: stats?.domainStats?.map(d => d.studentCount) || [],
             backgroundColor: theme.charts.domain,
             borderWidth: 0
         }]
     };
 
     const yearlyComparisonData = {
-        labels: stats.yearlyStats.map(y => y.year),
+        labels: stats?.yearlyStats?.map(y => y.year) || [],
         datasets: [
             {
                 label: 'Activities',
-                data: stats.yearlyStats.map(y => y.activityCount),
+                data: stats?.yearlyStats?.map(y => y.activityCount) || [],
                 backgroundColor: theme.charts.activities,
                 borderColor: theme.charts.activities,
                 type: 'line',
@@ -112,7 +117,7 @@ const Home = () => {
             },
             {
                 label: 'Students',
-                data: stats.yearlyStats.map(y => y.studentCount),
+                data: stats?.yearlyStats?.map(y => y.studentCount) || [],
                 backgroundColor: theme.charts.students,
                 borderColor: theme.charts.students,
                 type: 'bar'
@@ -121,11 +126,11 @@ const Home = () => {
     };
 
     const monthlyTrendsData = {
-        labels: stats.monthlyStats.map(m => m.month),
+        labels: stats?.monthlyStats?.map(m => m.month) || [],
         datasets: [
             {
                 label: 'Activities',
-                data: stats.monthlyStats.map(m => m.activityCount),
+                data: stats?.monthlyStats?.map(m => m.activityCount) || [],
                 borderColor: theme.charts.activities,
                 backgroundColor: `${theme.charts.activities}20`,
                 fill: true
@@ -149,7 +154,9 @@ const Home = () => {
                     </div>
                     <div className="stat-info">
                         <h3>Total Activities</h3>
-                        <div className="value">{stats.overview.totalActivities.toLocaleString()}</div>
+                        <div className="value">
+                            {stats?.overview?.totalActivities?.toLocaleString() || '0'}
+                        </div>
                     </div>
                 </div>
 
@@ -159,7 +166,9 @@ const Home = () => {
                     </div>
                     <div className="stat-info">
                         <h3>Total Students</h3>
-                        <div className="value">{stats.overview.totalStudents.toLocaleString()}</div>
+                        <div className="value">
+                            {stats?.overview?.totalStudents?.toLocaleString() || '0'}
+                        </div>
                     </div>
                 </div>
 
@@ -169,7 +178,9 @@ const Home = () => {
                     </div>
                     <div className="stat-info">
                         <h3>Active Domains</h3>
-                        <div className="value">{stats.overview.totalDomains}</div>
+                        <div className="value">
+                            {stats?.overview?.totalDomains || '0'}
+                        </div>
                     </div>
                 </div>
 
@@ -180,9 +191,10 @@ const Home = () => {
                     <div className="stat-info">
                         <h3>Avg. Participation</h3>
                         <div className="value">
-                            {stats.overview.totalActivities ? 
-                                Math.round(stats.overview.totalStudents / stats.overview.totalActivities) 
-                                : 0}
+                            {stats?.overview?.totalActivities > 0 
+                                ? Math.round(stats.overview.totalStudents / stats.overview.totalActivities)
+                                : '0'
+                            }
                         </div>
                     </div>
                 </div>
@@ -191,70 +203,86 @@ const Home = () => {
             <div className="charts-grid">
                 <div className="chart-card">
                     <h3>Domain-wise Distribution</h3>
-                    <Doughnut 
-                        data={domainChartData}
-                        options={{
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                    labels: { padding: 20 }
+                    {stats?.domainStats?.length > 0 ? (
+                        <Doughnut 
+                            data={domainChartData}
+                            options={{
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: { padding: 20 }
+                                    }
                                 }
-                            }
-                        }}
-                    />
+                            }}
+                        />
+                    ) : (
+                        <p>No domain data available</p>
+                    )}
                 </div>
 
                 <div className="chart-card">
                     <h3>Yearly Comparison</h3>
-                    <Bar 
-                        data={yearlyComparisonData}
-                        options={{
-                            responsive: true,
-                            scales: {
-                                y: { beginAtZero: true }
-                            }
-                        }}
-                    />
+                    {stats?.yearlyStats?.length > 0 ? (
+                        <Bar 
+                            data={yearlyComparisonData}
+                            options={{
+                                responsive: true,
+                                scales: {
+                                    y: { beginAtZero: true }
+                                }
+                            }}
+                        />
+                    ) : (
+                        <p>No yearly data available</p>
+                    )}
                 </div>
 
                 <div className="chart-card">
                     <h3>Monthly Activity Trends</h3>
-                    <Line 
-                        data={monthlyTrendsData}
-                        options={{
-                            responsive: true,
-                            scales: {
-                                y: { beginAtZero: true }
-                            },
-                            plugins: {
-                                legend: {
-                                    display: false
+                    {stats?.monthlyStats?.length > 0 ? (
+                        <Line 
+                            data={monthlyTrendsData}
+                            options={{
+                                responsive: true,
+                                scales: {
+                                    y: { beginAtZero: true }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
                                 }
-                            }
-                        }}
-                    />
+                            }}
+                        />
+                    ) : (
+                        <p>No monthly data available</p>
+                    )}
                 </div>
 
                 <div className="chart-card">
                     <h3>Recent Participations</h3>
                     <div className="top-activities-list">
-                        {stats.topActivities.map((activity, index) => (
-                            <div key={index} className="activity-item">
-                                <div className="activity-rank">{index + 1}</div>
-                                <div className="activity-details">
-                                    <div className="activity-name">{activity.name}</div>
-                                    <div className="activity-meta">
-                                        <span className="activity-domain">{activity.domain}</span>
-                                        <span className="activity-date">{activity.date}</span>
+                        {stats?.topActivities?.length > 0 ? (
+                            stats.topActivities.map((activity, index) => (
+                                <div key={index} className="activity-item">
+                                    <div className="activity-rank">{index + 1}</div>
+                                    <div className="activity-details">
+                                        <div className="activity-name">{activity.name}</div>
+                                        <div className="activity-meta">
+                                            <span className="activity-domain">{activity.domain}</span>
+                                            <span className="activity-date">{activity.date}</span>
+                                        </div>
+                                    </div>
+                                    <div className="activity-participants">
+                                        <FiUsers className="icon" />
+                                        {activity.studentsParticipated}
                                     </div>
                                 </div>
-                                <div className="activity-participants">
-                                    <FiUsers className="icon" />
-                                    {activity.studentsParticipated}
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>No recent activities available</p>
+                        )}
                     </div>
                 </div>
             </div>

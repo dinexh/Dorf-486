@@ -90,15 +90,50 @@ export default function UploadActivities() {
         }
     };
 
+    const handleBulkUpload = async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            toast.error('Please select a file to upload');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/api/dashboard/uploadactivities/bulkupload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to upload file');
+            }
+
+            toast.success('Bulk upload successful!');
+            fileInput.value = ''; // Reset file input
+
+        } catch (error) {
+            console.error('Error during bulk upload:', error);
+            toast.error(error.message || 'Failed to upload file');
+        }
+    };
+
     return (
         <div className="activities-component">
             <div className="activities-header">
                 <h1>Upload Activity</h1>
             </div>
             <div className="upload-form-container">
-                <form onSubmit={handleSubmit} className="upload-form">
-                    <div className="form-group">
-                        <label htmlFor="name">Activity Name</label>
+                {/* <div className="upload-form-container-one"> */}
+                    <form onSubmit={handleSubmit} className="upload-form">
+                        <div className="form-group">
+                            <label htmlFor="name">Activity Name</label>
                         <input
                             type="text"
                             id="name"
@@ -165,7 +200,8 @@ export default function UploadActivities() {
                         </button>
                         <button type="button" className="cancel-btn">Cancel</button>
                     </div>
-                </form>
+                    </form>
+                {/* </div> */}
             </div>
         </div>
     );

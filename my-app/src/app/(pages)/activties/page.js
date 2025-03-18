@@ -161,19 +161,11 @@ function Page() {
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
-                Previous
+                Prev
               </button>
-              {pageNumbers.map(number => (
-                <button
-                  key={number}
-                  onClick={() => setCurrentPage(number)}
-                  style={{
-                    backgroundColor: currentPage === number ? '#006400' : '#008000'
-                  }}
-                >
-                  {number}
-                </button>
-              ))}
+              <button className="page-indicator">
+                Page {currentPage} of {totalPages}
+              </button>
               <button 
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}

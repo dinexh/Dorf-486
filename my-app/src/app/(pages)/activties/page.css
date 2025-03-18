@@ -1,7 +1,7 @@
 .activities-component {
     width: 100%;
     padding: 20px;
-    font-family: 'Poppins', sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 .activities-component-in {
@@ -10,216 +10,132 @@
     margin: 0 auto;
 }
 
+/* Header Styles */
 .activities-component-in-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
-
-.activites-component-in-header-one {
+.activites-component-in-header-one{
     display: flex;
     gap: 10px;
 }
-
 .activites-component-in-header-one select {
-    padding: 8px 15px;
+    padding: 5px 10px;
     background-color: #008000;
     color: white;
     border: 1px solid #006400;
-    border-radius: 4px;
-    cursor: pointer;
-    min-width: 120px;
-    font-size: 1rem;
+    border-radius: 0;
+    min-width: 100px;
 }
 
 .activites-component-in-header-one button {
-    padding: 8px 15px;
+    padding: 5px 15px;
     background-color: #008000;
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
+    border: 1px solid #006400;
+    border-radius: 0;
 }
 
 .activites-component-in-header-two h1 {
-    font-size: 2rem;
+    font-size: 1.9rem;
     font-weight: bold;
     margin: 0;
+    text-align: center;
 }
 
 .activites-component-in-header-three input {
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 250px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.activites-component-in-header-three input:focus {
-    border-color: #008000;
-    box-shadow: 0 0 0 2px rgba(0, 128, 0, 0.1);
+    padding: 5px 10px;
+    border: 1px solid #000;
+    width: 200px;
+    font-size: 14px;
 }
 
 /* Table Styles */
-.activities-component-in-body {
-    width: 100%;
-    overflow-x: auto;
-}
-
 .activites-component-in-table table {
     width: 100%;
     border-collapse: collapse;
-    border: 2px solid black;
-    
-
+    border: 2px solid #000;
 }
 
 .activites-component-in-table th {
     background-color: #008000;
     color: white;
-    padding: 12px;
+    padding: 10px;
     text-align: left;
-    border: 2px solid black;
+    border: 2px solid #000;
+    font-weight: normal;
 }
-.activites-component-in-table tr{
-    border: 2px solid black;
-}
+
 .activites-component-in-table td {
-    padding: 12px;
-    border: 1px solid green;
+    padding: 8px 10px;
+    border: 1px solid #008000;
 }
 
 .activites-component-in-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fff;
 }
 
-/* View Button in table */
-.activites-component-in-table td:last-child {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.activites-component-in-table td:last-child a {
-    border: none;
-}
-
-/* Update the report link styles */
-.report-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #008000;
-    font-size: 1.5rem; /* Make the icon slightly larger */
-    padding: 4px;
-    transition: all 0.3s ease;
-    border: none; /* Remove the border */
-}
-
-.report-link:hover {
-    color: #006400; /* Darker green on hover */
-    transform: scale(1.1); /* Slightly enlarge on hover */
-    background-color: transparent; /* Remove background color */
+.activites-component-in-table tr:nth-child(odd) {
+    background-color: #fff;
 }
 
 /* Pagination Styles */
 .activites-component-in-table-pagination {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 10px;
     margin-top: 20px;
     padding: 10px 0;
 }
-
-.activites-component-in-table-pagination-left {
+.activites-component-in-table-pagination-left{
     display: flex;
     gap: 10px;
 }
 
-.activites-component-in-table-pagination-left button {
-    padding: 8px 15px;
+.activites-component-in-table-pagination button {
+    padding: 5px 15px;
     background-color: #008000;
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    min-width: 150px;
+    border: 1px solid #006400;
+    border-radius: 0;
+    font-size: 14px;
 }
 
-.activites-component-in-table-pagination-right {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+/* View Link Style */
+.report-link {
+    color: #008000;
+    text-decoration: none;
 }
 
-.activites-component-in-table-pagination-right button {
-    padding: 8px 15px;
-    background-color: #008000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    min-width: 40px;
-    transition: background-color 0.3s ease;
-}
-
-.activites-component-in-table-pagination-right button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Active page button */
-.activites-component-in-table-pagination-right button[style*="backgroundColor: #006400"] {
-    font-weight: bold;
-}
-
-/* Count buttons improvements */
-.activites-component-in-table-pagination-left button {
-    font-weight: 500;
-    min-width: 150px;
-}
-
-/* Responsive Design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .activities-component-in-header {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
-
-    .activites-component-in-header-one,
-    .activites-component-in-header-three {
-        width: 100%;
-    }
-
+    
     .activites-component-in-header-three input {
         width: 100%;
     }
-
-    .activites-component-in-table-pagination {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .activites-component-in-table-pagination-left,
-    .activites-component-in-table-pagination-right {
-        width: 100%;
-        justify-content: center;
+    
+    .activities-component-in-body {
+        overflow-x: auto;
     }
 }
 
-/* Hover Effects */
-.activites-component-in-table tr:hover {
-    background-color: #f0f0f0;
+/* Additional Specific Styles */
+.activites-component-in-table td:first-child {
+    width: 120px;
 }
 
-.activites-component-in-header-one button:hover,
-.activites-component-in-table-pagination button:hover {
-    background-color: #006400;
+.activites-component-in-table td:last-child {
+    width: 80px;
+    text-align: center;
+}
+
+.activites-component-in-table td:nth-child(3) {
+    width: 100px;
+    text-align: center;
 }
 

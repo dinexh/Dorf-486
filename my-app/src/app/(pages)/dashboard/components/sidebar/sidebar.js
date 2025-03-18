@@ -25,6 +25,7 @@ export default function Sidebar({
     onNewsUploadClick,
     onHeroImageClick,
     onFocusAreasClick
+
 }) {
     const [openMenus, setOpenMenus] = useState({
         admins: false,

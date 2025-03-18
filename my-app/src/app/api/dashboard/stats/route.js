@@ -3,17 +3,15 @@ import db from '@/lib/db';
 
 export async function GET() {
   try {
-    // Get overall statistics
-    const [overallStats] = await db.query(`
+    // Get total activities and students
+    const [activityStats] = await db.query(`
       SELECT 
-        COUNT(DISTINCT a.id) as totalActivities,
-        SUM(a.studentsParticipated) as totalStudents,
-        COUNT(DISTINCT d.id) as totalDomains
-      FROM Activity a
-      JOIN Domain d ON a.domain_id = d.id
+        COUNT(*) as totalActivities,
+        SUM(studentsParticipated) as totalStudents
+      FROM Activity
     `);
 
-    // Get domain-wise statistics
+    // Get domain statistics with student count
     const [domainStats] = await db.query(`
       SELECT 
         d.name as domainName,
@@ -25,56 +23,67 @@ export async function GET() {
       ORDER BY studentCount DESC
     `);
 
-    // Get year-wise statistics
+    // Get yearly statistics
     const [yearlyStats] = await db.query(`
       SELECT 
         YEAR(date) as year,
-        COUNT(id) as activityCount,
+        COUNT(*) as activityCount,
         SUM(studentsParticipated) as studentCount
       FROM Activity
       GROUP BY YEAR(date)
-      ORDER BY year DESC
+      ORDER BY year ASC
     `);
 
-    // Get month-wise statistics for current year
+    // Get monthly activity count (last 6 months)
     const [monthlyStats] = await db.query(`
       SELECT 
-        DATE_FORMAT(date, '%M') as month,
-        COUNT(id) as activityCount,
+        DATE_FORMAT(date, '%Y-%m-01') as monthStart,
+        DATE_FORMAT(date, '%b %Y') as month,
+        COUNT(*) as activityCount,
         SUM(studentsParticipated) as studentCount
       FROM Activity
-      WHERE YEAR(date) = YEAR(CURRENT_DATE())
-      GROUP BY MONTH(date), DATE_FORMAT(date, '%M')
-      ORDER BY MONTH(date)
+      WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
+      GROUP BY monthStart, month
+      ORDER BY monthStart ASC
     `);
 
-    // Get top 5 activities by participation
+    // Get top activities
     const [topActivities] = await db.query(`
       SELECT 
         a.name,
-        d.name as domain,
+        DATE_FORMAT(a.date, '%d %b %Y') as date,
         a.studentsParticipated,
-        DATE_FORMAT(a.date, '%d %b %Y') as date
+        d.name as domain
       FROM Activity a
       JOIN Domain d ON a.domain_id = d.id
-      ORDER BY a.studentsParticipated DESC
+      ORDER BY a.date DESC
       LIMIT 5
     `);
 
-    return NextResponse.json({
+    const formattedStats = {
       success: true,
       data: {
         overview: {
-          totalActivities: overallStats[0].totalActivities || 0,
-          totalStudents: overallStats[0].totalStudents || 0,
-          totalDomains: overallStats[0].totalDomains || 0,
+          totalActivities: activityStats[0]?.totalActivities || 0,
+          totalStudents: activityStats[0]?.totalStudents || 0,
+          totalDomains: domainStats.length || 0,
+          avgParticipation: activityStats[0]?.totalActivities > 0 
+            ? Math.round(activityStats[0].totalStudents / activityStats[0].totalActivities) 
+            : 0
         },
         domainStats: domainStats,
         yearlyStats: yearlyStats,
         monthlyStats: monthlyStats,
-        topActivities: topActivities
+        topActivities: topActivities.map(activity => ({
+          name: activity.name,
+          date: activity.date,
+          studentsParticipated: activity.studentsParticipated,
+          domain: activity.domain
+        }))
       }
-    });
+    };
+
+    return NextResponse.json(formattedStats);
   } catch (error) {
     console.error('Dashboard stats error:', error);
     return NextResponse.json(
