@@ -1,5 +1,5 @@
 .dashboard-footer {
-    background-color: #1b5e20; /* Same as nav */
+    background-color: green;
     color: rgba(255, 255, 255, 0.8);
     padding: 0.4rem;
     text-align: center;
@@ -7,7 +7,7 @@
     height: 35px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .dashboard-footer a {

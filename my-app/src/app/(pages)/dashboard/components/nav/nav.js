@@ -20,7 +20,7 @@ const DashboardNav = () => {
                     height={32}
                     className="dashboard-nav-logo"
                 />
-                <h2>Smart Village Revolution Admin Portal | KLEF</h2>
+                <h2>Smart Village Revolution {user?.role === 'superadmin' ? 'Super Admin' : 'Admin'} | KLEF</h2>
             </div>
             <div className="dashboard-nav-two">
                 <h2>

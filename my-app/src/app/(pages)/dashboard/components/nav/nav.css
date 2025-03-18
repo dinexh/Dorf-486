@@ -2,10 +2,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1.5rem;
-    background-color: #1b5e20; /* Dark professional green */
+    padding: 1rem;
+    background-color: green;
     color: white;
-    height: 45px; /* Slimmer height */
+    height: 8vh;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
