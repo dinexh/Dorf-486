@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaArrowUp, FaSearch } from 'react-icons/fa';
+import Image from 'next/image';
 import './page.css';
 import DashboardFooter from '../dashboard/components/footer/footer';
 
@@ -73,7 +74,8 @@ const NewsPage = () => {
               {filteredNews.map(article => (
                 <div key={article.id} className="article-card">
                   <div className="article-image-wrapper">
-                    <img src={article.articleLink} alt={article.title} />
+                    <image src={article.articleLink} alt={article.title}    width={300}
+          height={200}  />
                   </div>
                   <div className="article-content">
                     <span className="article-date">{new Date(article.date).toLocaleDateString('en-US', {

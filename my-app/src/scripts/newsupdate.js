@@ -1,6 +1,6 @@
-import mysql from 'mysql2/promise';
+import mysql2 from 'mysql2';
 
-const awardData = [
+const newsdata = [
     {
         date: "2023-08-15",
         title: "Students painting on the walls of MPP school",
@@ -83,42 +83,50 @@ const awardData = [
         description: "Digital education initiatives are transforming schools in rural villages, bridging the educational gap and providing new opportunities for children.",
         ArticleUrl: "https://kluniversityin-my.sharepoint.com/:i:/g/personal/2300030350_kluniversity_in/Ea0gaZJqIGlGttRYZY3cxkUBo05n76pybfJgOZa0RGpHhw?e=4Z1XFK",
         articleLink: "https://firebasestorage.googleapis.com/v0/b/svrwebsite-1e892.appspot.com/o/news%2FHealth%20Camp.png?alt=media&token=bb343e1e-adeb-48fb-a76b-e5081fc84236"
-      },    
-];
+      },
+]
 
-async function addAwards() {
-    // Create a connection pool
-    const pool = mysql.createPool({
+async function newsupdate() {
+    const pool = mysql2.createPool({
         host: 'localhost',
         user: 'root',
-        password: 'Dinesh@123', // Using the password from your array.js file
+        password: 'Dinesh@123',
         database: 'svr_klef',
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0
     });
 
+    const promisePool = pool.promise();
     let connection;
+    
     try {
-        connection = await pool.getConnection();
+        connection = await promisePool.getConnection();
         
-        // Insert each award
-        for (const award of awardData) {
+        // Insert each news item
+        for (const news of newsdata) {
+            // Set null if links are missing instead of empty string
+            const articleLink = news.articleLink || null;
+            const articleUrl = news.ArticleUrl || null;
+            
             await connection.query(
-                'INSERT INTO awards (image_link, description, award_date) VALUES (?, ?, ?)',
-                [award.image_link, award.description, award.award_date]
+                'INSERT INTO News (date, title, description, articleLink, ArticleUrl) VALUES (?, ?, ?, ?, ?)',
+                [news.date, news.title, news.description, articleLink, articleUrl]
             );
-            console.log(`Added award: ${award.description.substring(0, 50)}...`);
+            console.log(`Added news: ${news.title.substring(0, 50)}...`);
         }
 
-        console.log('All awards added successfully!');
+        console.log('All news items added successfully!');
     } catch (error) {
-        console.error('Error adding awards:', error);
+        console.error('Error adding news:', error.message);
+        if (error.sql) {
+            console.error('SQL Query:', error.sql);
+        }
     } finally {
         if (connection) connection.release();
-        await pool.end();
+        await promisePool.end();
     }
 }
 
 // Run the function
-addAwards();
+newsupdate();
