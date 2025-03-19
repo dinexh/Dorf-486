@@ -105,6 +105,8 @@ VALUES (
     '2300032048',
     'admin'
 );
-
+-- updates to db
  ALTER TABLE News MODIFY COLUMN articleLink VARCHAR(255) NULL;
   ALTER TABLE News MODIFY COLUMN ArticleUrl VARCHAR(255) NULL;
+  LTER TABLE Activity 
+MODIFY COLUMN domain_id INT NULL;

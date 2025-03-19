@@ -8,7 +8,8 @@ const nextConfig = {
             'imgur.com',
             'drive.google.com',
             'res.cloudinary.com',
-            'iili.io'
+            'iili.io',
+            'firebasestorage.googleapis.com'
         ],
     },
 }

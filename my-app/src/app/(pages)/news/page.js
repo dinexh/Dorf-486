@@ -74,7 +74,7 @@ const NewsPage = () => {
               {filteredNews.map(article => (
                 <div key={article.id} className="article-card">
                   <div className="article-image-wrapper">
-                    <image src={article.articleLink} alt={article.title}    width={300}
+                    <Image src={article.articleLink} alt={article.title}    width={300}
           height={200}  />
                   </div>
                   <div className="article-content">
