@@ -91,7 +91,7 @@ async function addAwards() {
     const pool = mysql.createPool({
         host: 'localhost',
         user: 'root',
-        password: 'Dinesh@123', // Using the password from your array.js file
+        password: process.env.DB_PASSWORD,
         database: 'svr_klef',
         waitForConnections: true,
         connectionLimit: 10,

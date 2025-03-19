@@ -6,7 +6,7 @@ const activities = require('./updatedArray.js').default || require('./updatedArr
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',  // replace with your MySQL username
-    password: 'Dinesh@123',  // replace with your MySQL password
+    password: process.env.DB_PASSWORD,  // replace with your MySQL password
     database: 'svr_klef',
     waitForConnections: true,
     connectionLimit: 10,

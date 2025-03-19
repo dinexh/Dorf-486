@@ -90,7 +90,7 @@ async function newsupdate() {
     const pool = mysql2.createPool({
         host: 'localhost',
         user: 'root',
-        password: 'Dinesh@123',
+        password: process.env.DB_PASSWORD,
         database: 'svr_klef',
         waitForConnections: true,
         connectionLimit: 10,
