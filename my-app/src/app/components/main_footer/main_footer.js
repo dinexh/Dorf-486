@@ -49,7 +49,8 @@ export const FooterData = {
             { title: "Parameters", scrollTo: "home-five" },
             { title: "Annual Reports", scrollTo: "home-eight" },
             { title: "Gallery", url: "/gallery" },
-            { title: "News", url: "/news" }
+            { title: "News", url: "/news" },
+            {title: "Login" , url : "/auth/login"}
         ]
     },
     reference: {

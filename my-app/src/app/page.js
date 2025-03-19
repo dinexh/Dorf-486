@@ -2,70 +2,46 @@
 import { useState, useEffect } from 'react';
 import Main_footer from "./components/main_footer/main_footer";
 
-const focusAreasData = [
-    {
-        title: "Health and Hygiene",
-        content: "Smart Villages prioritize community health through improved sanitation, clean water access, and healthcare facilities. Regular health camps, awareness programs, and modern medical facilities ensure residents' wellbeing.",
-        image: "https://example.com/health-image.jpg"
-    },
-    {
-        title: "Agriculture",
-        content: "Agriculture in Smart Villages thrives through the adoption of precision farming techniques. Leveraging technology, farmers make data-driven decisions for irrigation, fertilization, and pest control. Sustainable practices like organic farming and renewable energy integration ensure long-term environmental health.",
-        image: "https://example.com/agriculture-image.jpg"
-    },
-    {
-        title: "Quality Education",
-        content: "Digital classrooms, skilled teachers, and modern learning tools enhance educational standards. Focus on practical skills and technological literacy prepares students for future opportunities.",
-        image: "https://example.com/education-image.jpg"
-    },
-    {
-        title: "Village Infrastructure",
-        content: "Development of roads, drainage systems, and public facilities. Smart lighting, waste management, and digital connectivity form the backbone of village development.",
-        image: "https://example.com/infrastructure-image.jpg"
-    },
-    {
-        title: "Culture and Community",
-        content: "Preserving local traditions while embracing modern development. Community centers foster social bonds and cultural exchange.",
-        image: "https://example.com/culture-image.jpg"
-    },
-    {
-        title: "Energy Availability and Efficiency",
-        content: "Sustainable power solutions including solar and biogas. Smart grid systems ensure efficient energy distribution and consumption.",
-        image: "https://example.com/energy-image.jpg"
-    },
-    {
-        title: "Green Innovation",
-        content: "Eco-friendly initiatives and innovative solutions for sustainable development. Focus on reducing carbon footprint and environmental protection.",
-        image: "https://example.com/innovation-image.jpg"
-    },
-    {
-        title: "Women Empowerment",
-        content: "Skills development, entrepreneurship opportunities, and leadership roles for women. Creating an inclusive environment for gender equality.",
-        image: "https://example.com/women-image.jpg"
-    }
-];
-
 export default function Home() {
-    const [selectedFocus, setSelectedFocus] = useState(focusAreasData[0]);
-    const [focusAreas, setFocusAreas] = useState(focusAreasData);
+    const [selectedFocus, setSelectedFocus] = useState(null);
+    const [focusAreas, setFocusAreas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // If you need to fetch data from API later, uncomment this
-    /*
     useEffect(() => {
-        const fetchFocusAreas = async () => {
-            try {
-                const response = await fetch('/api/focus-areas');
-                const data = await response.json();
-                setFocusAreas(data);
-                setSelectedFocus(data[0]);
-            } catch (error) {
-                console.error('Error fetching focus areas:', error);
-            }
-        };
-        
         fetchFocusAreas();
     }, []);
-    */
+
+    const fetchFocusAreas = async () => {
+        try {
+            const response = await fetch('/api/dashboard/focusd');
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Transform the data to match the expected format
+                const transformedData = data.data.map(area => ({
+                    id: area.id,
+                    title: area.domain_name,  // Using domain_name from JOIN query
+                    content: area.description,
+                    image: area.imageLink
+                }));
+                
+                setFocusAreas(transformedData);
+                setSelectedFocus(transformedData[0]); // Set first item as selected
+            }
+        } catch (error) {
+            console.error('Error fetching focus areas:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    if (isLoading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    if (!selectedFocus) {
+        return <div className="no-data">No focus areas available</div>;
+    }
 
     return(
         <div className="home-component">
@@ -76,10 +52,10 @@ export default function Home() {
                     </div>
                     <div className="focus-component-focus-in-main">
                         <div className="focus-sidebar">
-                            {focusAreas.map((area, index) => (
+                            {focusAreas.map((area) => (
                                 <button
-                                    key={index}
-                                    className={`focus-button ${selectedFocus.title === area.title ? 'active' : ''}`}
+                                    key={area.id}  // Using id instead of index
+                                    className={`focus-button ${selectedFocus.id === area.id ? 'active' : ''}`}
                                     onClick={() => setSelectedFocus(area)}
                                 >
                                     {area.title}
@@ -95,7 +71,13 @@ export default function Home() {
                                     {selectedFocus.content}
                                 </div>
                                 <div className="focus-image">
-                                    <img src={selectedFocus.image} alt={selectedFocus.title} />
+                                    <img 
+                                        src={selectedFocus.image} 
+                                        alt={selectedFocus.title}
+                                        onError={(e) => {
+                                            e.target.src = '/placeholder-image.jpg'; // Add a placeholder image
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
