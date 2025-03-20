@@ -90,7 +90,7 @@ INSERT INTO User (name, email, password, idNumber, role)
 VALUES (
     'Dinesh Korukonda',
     '2300030350@kluniversity.in',
-    '$2b$10$ywQ5ZvLCPhCr26QGTmjFV.tvX8RYKD3eV1lLH2P9e6PKqtcYkLI.q',
+    '$2b$10$vIcLGpxwuhx5TUxViBEMaeZ/bUiaiBYuKbjzIbXjZhY8zBqRO5CKy'
     -- 'Dinesh@123',
     '2300030350',
     'superadmin'
@@ -100,7 +100,7 @@ INSERT INTO User (name, email, password, idNumber, role)
 VALUES (
     'Pavan Karthik',
     '2300032048@kluniversity.in',
-    '$2b$10$NZKQC4UwfY/V..FclAewBOfqQUSHQ8tKvAXABTMarOt50YhCZ..vC',
+    '$2b$10$mjbxi0Pl5RX1DUGhxMQ0Qu.FUTE7z1xDxwyk8J4qN3knmpU497.lW'
     -- 'Karthik@123',
     '2300032048',
     'admin'
