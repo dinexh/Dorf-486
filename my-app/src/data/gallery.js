@@ -1,21 +1,3 @@
-import pool from '../lib/db.js';
-
-// Domain ID mapping based on the database
-const DOMAIN_IDS = {
-    'Agriculture': 5,
-    'Cultural Exchange': 11,
-    'Digital Literacy': 9,
-    'Green Innovation': 10,
-    'Health & Hygiene': 3,  // Note: Slightly different name in DB (Health and Hygiene)
-    'Livelihood Enhancement': 8,
-    'Quality Education': 4,
-    'Social Community Actions': 7,  // Note: Slightly different name in DB
-    'Village Infrastructure': 6,    // Note: Slightly different spelling in DB
-    'Water Conservation': 1,        // Note: Different spelling in DB (Water Conversation)
-    'Women Empowerment': 2,
-    'Energy Availbility & Efficiency': null  // This domain doesn't exist in DB
-};
-
 const galleryImages = [
     {
         imageLink: 'https://i.imghippo.com/files/PGEn9047ltI.jpeg',
@@ -907,34 +889,3 @@ const galleryImages = [
         domain_id: 'Green Innovation',
       },
 ];
-
-async function insertGalleryImages() {
-    try {
-        const connection = await pool.getConnection();
-        
-        for (const image of galleryImages) {
-            const domainId = DOMAIN_IDS[image.domain_id];
-            
-            // Skip if domain doesn't exist
-            if (!domainId) {
-                console.log(`Skipping image ${image.imageLink} - Domain "${image.domain_id}" not found`);
-                continue;
-            }
-            
-            await connection.execute(
-                'INSERT INTO Gallery (imageLink, domain_id) VALUES (?, ?)',
-                [image.imageLink, domainId]
-            );
-            console.log(`Inserted image: ${image.imageLink} for domain: ${image.domain_id} (ID: ${domainId})`);
-        }
-        
-        connection.release();
-        console.log('All gallery images inserted successfully');
-    } catch (error) {
-        console.error('Error inserting gallery images:', error);
-    } finally {
-        process.exit();
-    }
-}
-
-insertGalleryImages(); 
