@@ -1,6 +1,4 @@
-import mysql2 from 'mysql2';
-
-const newsdata = [
+const awardData = [
     {
         date: "2023-08-15",
         title: "Students painting on the walls of MPP school",
@@ -83,50 +81,5 @@ const newsdata = [
         description: "Digital education initiatives are transforming schools in rural villages, bridging the educational gap and providing new opportunities for children.",
         ArticleUrl: "https://kluniversityin-my.sharepoint.com/:i:/g/personal/2300030350_kluniversity_in/Ea0gaZJqIGlGttRYZY3cxkUBo05n76pybfJgOZa0RGpHhw?e=4Z1XFK",
         articleLink: "https://firebasestorage.googleapis.com/v0/b/svrwebsite-1e892.appspot.com/o/news%2FHealth%20Camp.png?alt=media&token=bb343e1e-adeb-48fb-a76b-e5081fc84236"
-      },
-]
-
-async function newsupdate() {
-    const pool = mysql2.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: process.env.DB_PASSWORD,
-        database: 'svr_klef',
-        waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
-    });
-
-    const promisePool = pool.promise();
-    let connection;
-    
-    try {
-        connection = await promisePool.getConnection();
-        
-        // Insert each news item
-        for (const news of newsdata) {
-            // Set null if links are missing instead of empty string
-            const articleLink = news.articleLink || null;
-            const articleUrl = news.ArticleUrl || null;
-            
-            await connection.query(
-                'INSERT INTO News (date, title, description, articleLink, ArticleUrl) VALUES (?, ?, ?, ?, ?)',
-                [news.date, news.title, news.description, articleLink, articleUrl]
-            );
-            console.log(`Added news: ${news.title.substring(0, 50)}...`);
-        }
-
-        console.log('All news items added successfully!');
-    } catch (error) {
-        console.error('Error adding news:', error.message);
-        if (error.sql) {
-            console.error('SQL Query:', error.sql);
-        }
-    } finally {
-        if (connection) connection.release();
-        await promisePool.end();
-    }
-}
-
-// Run the function
-newsupdate();
+      },    
+];

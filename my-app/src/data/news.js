@@ -1,6 +1,4 @@
-import mysql from 'mysql2/promise';
-
-const awardData = [
+const newsdata = [
     {
         date: "2023-08-15",
         title: "Students painting on the walls of MPP school",
@@ -83,42 +81,5 @@ const awardData = [
         description: "Digital education initiatives are transforming schools in rural villages, bridging the educational gap and providing new opportunities for children.",
         ArticleUrl: "https://kluniversityin-my.sharepoint.com/:i:/g/personal/2300030350_kluniversity_in/Ea0gaZJqIGlGttRYZY3cxkUBo05n76pybfJgOZa0RGpHhw?e=4Z1XFK",
         articleLink: "https://firebasestorage.googleapis.com/v0/b/svrwebsite-1e892.appspot.com/o/news%2FHealth%20Camp.png?alt=media&token=bb343e1e-adeb-48fb-a76b-e5081fc84236"
-      },    
-];
-
-async function addAwards() {
-    // Create a connection pool
-    const pool = mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: process.env.DB_PASSWORD,
-        database: 'svr_klef',
-        waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
-    });
-
-    let connection;
-    try {
-        connection = await pool.getConnection();
-        
-        // Insert each award
-        for (const award of awardData) {
-            await connection.query(
-                'INSERT INTO awards (image_link, description, award_date) VALUES (?, ?, ?)',
-                [award.image_link, award.description, award.award_date]
-            );
-            console.log(`Added award: ${award.description.substring(0, 50)}...`);
-        }
-
-        console.log('All awards added successfully!');
-    } catch (error) {
-        console.error('Error adding awards:', error);
-    } finally {
-        if (connection) connection.release();
-        await pool.end();
-    }
-}
-
-// Run the function
-addAwards();
+      },
+]
