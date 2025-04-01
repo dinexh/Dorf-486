@@ -14,6 +14,11 @@ CREATE TABLE User (
 
 );
 
+-- Domains Table
+CREATE TABLE Domain (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
 -- Activities Table
 CREATE TABLE Activity (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,11 +65,7 @@ CREATE TABLE HeroImage (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Domains Table
-CREATE TABLE Domain (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
+
 
 -- Areas Of Work Table
 CREATE TABLE AreasOfWork (
@@ -90,8 +91,7 @@ INSERT INTO User (name, email, password, idNumber, role)
 VALUES (
     'Dinesh Korukonda',
     '2300030350@kluniversity.in',
-    '$2b$10$vIcLGpxwuhx5TUxViBEMaeZ/bUiaiBYuKbjzIbXjZhY8zBqRO5CKy'
-    -- 'Dinesh@123',
+    '$2b$10$vIcLGpxwuhx5TUxViBEMaeZ/bUiaiBYuKbjzIbXjZhY8zBqRO5CKy',
     '2300030350',
     'superadmin'
 );
@@ -100,13 +100,13 @@ INSERT INTO User (name, email, password, idNumber, role)
 VALUES (
     'Pavan Karthik',
     '2300032048@kluniversity.in',
-    '$2b$10$mjbxi0Pl5RX1DUGhxMQ0Qu.FUTE7z1xDxwyk8J4qN3knmpU497.lW'
-    -- 'Karthik@123',
+    '$2b$10$mjbxi0Pl5RX1DUGhxMQ0Qu.FUTE7z1xDxwyk8J4qN3knmpU497.lW',
     '2300032048',
     'admin'
 );
+
 -- updates to db
  ALTER TABLE News MODIFY COLUMN articleLink VARCHAR(255) NULL;
   ALTER TABLE News MODIFY COLUMN ArticleUrl VARCHAR(255) NULL;
-  LTER TABLE Activity 
-MODIFY COLUMN domain_id INT NULL;
+--   LTER TABLE Activity 
+-- MODIFY COLUMN domain_id INT NULL;
