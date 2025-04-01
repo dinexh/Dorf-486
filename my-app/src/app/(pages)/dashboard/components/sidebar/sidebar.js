@@ -4,7 +4,7 @@ import './sidebar.css';
 import { 
     FaHome, FaGlobe, FaBriefcase, FaTasks, FaImages, 
     FaNewspaper, FaUser, FaUsersCog, FaChevronDown, 
-    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers , FaAward , FaFocus
+    FaChevronUp, FaUpload, FaTable, FaUserPlus, FaUsers , FaAward , FaFocus, FaEye
 } from 'react-icons/fa';
 import { MdOutlineCenterFocusStrong } from 'react-icons/md';
 
@@ -215,6 +215,12 @@ export default function Sidebar({
                             </a>
                             {openMenus.news && (
                                 <ul className="submenu">
+                                    <li>
+                                        <a onClick={onNewsViewClick} className="submenu-link" style={{ cursor: 'pointer' }}>
+                                            <FaEye className="menu-icon" />
+                                            <span>View News</span>
+                                        </a>
+                                    </li>
                                     <li>
                                         <a onClick={onNewsUploadClick} className="submenu-link" style={{ cursor: 'pointer' }}>
                                             <FaUpload className="menu-icon" />

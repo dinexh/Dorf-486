@@ -15,6 +15,7 @@ import UploadActivities from './components/activities/UploadActivities';
 import GalleryView from './components/gallery/GalleryView';
 import GalleryUpload from './components/gallery/GalleryUpload';
 import NewsUpload from './components/news/NewsUpload';
+import NewView from './components/news/NewView';
 import ViewAdmins from './components/manage-admins/ViewAdmins';
 import AddAdmin from './components/manage-admins/AddAdmin';
 import Updateaward from './components/awards/Upateawards';
@@ -44,6 +45,8 @@ export default function DashboardLayout({ children }) {
                 return <GalleryView />;
             case 'gallery-upload':
                 return <GalleryUpload />;
+            case 'news-view':
+                return <NewView />;
             case 'news-upload':
                 return <NewsUpload />;
             case 'awards':
@@ -90,4 +93,4 @@ export default function DashboardLayout({ children }) {
             </footer>
         </div>
     );
-} 
+}

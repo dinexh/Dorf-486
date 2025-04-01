@@ -1,191 +1,79 @@
 .profile-component {
-    width: 100%;
-    display: flex;
-    gap: 2rem;
-    padding: 2rem;
+    max-width: 900px;
+    /* margin: 2rem auto; */
+    padding: 1rem;
+    /* background: #ffffff; */
+    border-radius: 12px;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.02); */
 }
 
-.profile-component-main-one,
-.profile-component-main-two {
-    padding: 2rem;
-    width: 45%;
-    min-height: fit-content;
-    border-radius: 10px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    background: white;
-}
-
-.profile-component h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 1.5rem;
+.profile-component-main-one h1 {
+    color: #16a34a;
+    font-size: 1.8rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
     font-weight: 600;
-    text-align: center;
 }
 
 .profile-component-main-one-info {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-}
-
-.profile-component-main-two-info {
-    display: grid;
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
 }
 
 .profile-group {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    position: relative;
-    width: 100%;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+.profile-group:hover {
+    background: #f3f4f6;
+    transform: translateX(4px);
 }
 
 .profile-group label {
-    font-size: 0.9rem;
-    color: #666;
+    width: 140px;
+    color: #4b5563;
+    font-size: 0.95rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
 
 .profile-group p {
-    font-size: 1rem;
-    color: #333;
+    flex: 1;
+    color: #111827;
+    font-size: 1.1rem;
     margin: 0;
-    padding: 0.75rem;
-    background: #f5f5f5;
-    border-radius: 4px;
-    min-height: 2.5rem;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    word-break: break-word;
-}
-
-.profile-group input {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-    padding-right: 2.5rem;
-    width: 100%;
-}
-
-.profile-group input:focus {
-    outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
-}
-
-.profile-group input:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    color: #666;
-    display: flex;
-    align-items: center;
-}
-
-.password-toggle:hover {
-    color: #333;
-}
-
-.profile-group-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.profile-group-button button {
-    padding: 0.75rem 1.5rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.profile-group-button button:hover {
-    background-color: #45a049;
-}
-
-.profile-group-button button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+    padding-left: 2rem;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {
     .profile-component {
-        flex-direction: column;
+        padding: 1.5rem;
+        margin: 1rem;
     }
     
-    .profile-component-main-one,
-    .profile-component-main-two {
+    .profile-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.875rem;
+    }
+
+    .profile-group label {
         width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .profile-group p {
+        padding-left: 0;
+        font-size: 1rem;
     }
 }
-
-.profile-component-heading {
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1rem;
-}
-
-.profile-component-heading h1 {
-    font-size: 2rem;
-    color: #333;
-    margin: 0;
-}
-
-.profile-info {
-    display: grid;
-    gap: 2rem;
-}
-
-.profile-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.profile-field label {
-    font-size: 0.875rem;
-    color: #666;
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-.profile-field p {
-    font-size: 1.125rem;
-    color: #333;
-    margin: 0;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.role-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem !important;
-    border-radius: 9999px;
-    font-size: 0.875rem !important;
-    font-weight: 500;
-    text-transform: capitalize;
-    background-color: #e0f2f1;
-    color: #00897b !important;
-    border: none !important;
-} 

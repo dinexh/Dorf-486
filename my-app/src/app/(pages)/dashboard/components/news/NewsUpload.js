@@ -1,5 +1,4 @@
 import { useState , useEffect} from 'react';
-import Image from 'next/image';
 import './News.css';
 
 const NewsUpload = () => {
@@ -12,7 +11,8 @@ const NewsUpload = () => {
         title: '',
         description: '',
         date: '',
-        imageUrl: ''
+        imageUrl: '',
+        articleUrl: '' // Add initial value for articleUrl
     });
     const [message, setMessage] = useState('');
 
@@ -32,7 +32,14 @@ const NewsUpload = () => {
             });
             if (res.ok) {
                 setMessage('News article uploaded successfully!');
-                setFormData({ title: '', description: '', date: '', imageUrl: '' });
+                // Clear all fields including articleUrl
+                setFormData({ 
+                    title: '', 
+                    description: '', 
+                    date: '', 
+                    imageUrl: '',
+                    articleUrl: ''
+                });
             } else {
                 setMessage('Failed to upload news article');
             }
@@ -145,43 +152,6 @@ const NewsUpload = () => {
 
                 {message && <p className="message">{message}</p>}
                 </div>
-                <div className="newsupload-component-main-demo">
-                    <h2>Demo of the Article</h2>
-                    <Image 
-                        src="https://iili.io/3q4H2pe.th.png" 
-                        alt="Demo Article"
-                        width={500}
-                        height={300}
-                    />
-                </div>
-            </div>
-            <div className="news-upload-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            {/* <th>Image URL</th> */}
-                            {/* <th>Article URL</th> */}
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredNews.map(article => (
-                            <tr key={article.id}>
-                                <td>{article.title}</td>
-                                <td>{article.description}</td>
-                                <td>{article.date}</td>
-                                {/* <td>{article.imageUrl}</td> */}
-                                {/* <td>{article.ArticleUrl}</td> */}
-                                <td>
-                                    <button onClick={() => handleDelete(article.id)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
             </div>
         </div>
     );
