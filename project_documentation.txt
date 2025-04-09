@@ -1,0 +1,163 @@
+Smart Village Revolution Portal - Project Documentation
+===================================================
+
+Project Overview
+---------------
+The Smart Village Revolution (SVR) Portal is a comprehensive web application developed for KLEF (K L Deemed to be University) to manage and showcase their Smart Village Revolution initiatives. The portal serves as both an administrative dashboard and a public-facing website to display the university's rural development activities.
+
+Core Features
+------------
+1. Public Website
+   - Focus Areas showcase with 9-way principle
+   - Gallery of activities and events
+   - News section
+   - Information about collaborations
+   - Quick links to important resources
+
+2. Admin Dashboard
+   - Role-based access (Superadmin and Admin)
+   - Secure authentication with JWT
+   - Activity management
+   - Gallery management
+   - News management
+   - Awards management
+   - Focus areas management
+   - Domain management
+   - User management
+
+3. Security Features
+   - JWT-based authentication
+   - HTTP-only cookies
+   - Secure password hashing
+   - Protected API routes
+   - Input validation and sanitization
+   - CAPTCHA integration
+
+Technical Stack
+--------------
+Frontend:
+- Next.js 14 (React framework)
+- Custom CSS for styling
+- React Icons for UI elements
+- React Hot Toast for notifications
+- Chart.js for data visualization
+- React Scroll for smooth scrolling
+
+Backend:
+- Next.js API Routes
+- MySQL database
+- JWT for authentication
+- bcrypt for password hashing
+
+Development Tools:
+- ESLint for code linting
+- Turbopack for development
+- Environment variables for configuration
+
+Project Structure
+----------------
+/src
+├── app/                    # Next.js app directory
+│   ├── (pages)/           # Page components
+│   │   ├── dashboard/     # Admin dashboard
+│   │   ├── gallery/       # Gallery page
+│   │   └── info/         # Information pages
+│   ├── components/        # Reusable components
+│   └── globals.css        # Global styles
+├── config/                # Configuration files
+├── contexts/             # React contexts
+├── lib/                  # Utility functions and database
+└── scripts/              # Utility scripts
+
+Key Components
+-------------
+1. Dashboard
+   - Home component with statistics and charts
+   - Activity management
+   - Gallery management
+   - News management
+   - User management
+
+2. Gallery
+   - Image grid with filtering by domain
+   - Hero image display
+   - Responsive design
+
+3. Focus Areas
+   - 9-way principle showcase
+   - Domain-based organization
+   - Interactive UI
+
+4. Footer
+   - Quick links
+   - Contact information
+   - Collaboration links
+
+Database Structure
+-----------------
+The application uses MySQL with tables for:
+- Users (admin accounts)
+- Activities
+- Gallery images
+- News items
+- Focus areas
+- Domains
+- Awards
+
+Security Implementation
+---------------------
+1. Authentication
+   - JWT-based session management
+   - Secure password storage with bcrypt
+   - Role-based access control
+
+2. API Security
+   - Protected routes
+   - Input validation
+   - XSS prevention
+   - CSRF protection
+
+3. Data Security
+   - Secure database connections
+   - Environment variable protection
+   - Secure file uploads
+
+Development Guidelines
+--------------------
+1. Code Style
+   - ESLint configuration
+   - Consistent naming conventions
+   - Component-based architecture
+
+2. Performance
+   - Image optimization
+   - Lazy loading
+   - Efficient database queries
+
+3. Responsive Design
+   - Mobile-first approach
+   - Flexible layouts
+   - Adaptive components
+
+Deployment
+----------
+The application can be deployed using:
+1. Development server: npm run dev
+2. Production build: npm run build
+3. Production server: npm run start
+
+Environment Variables Required:
+- DB_HOST
+- DB_USER
+- DB_PASSWORD
+- DB_NAME
+- JWT_SECRET
+- NEXT_PUBLIC_APP_URL
+
+Contributors
+-----------
+Developed by Dinesh Korukonda of ZeroOne CodeClub at KLEF SAC.
+
+License
+-------
+© 2025 KLEF - SAC. All rights reserved. 
